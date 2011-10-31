@@ -1,0 +1,6 @@
+# List of files which contain translatable strings.
+# Copyright (C) 2011 Free Software Foundation, Inc.
+
+# Package source files
+
+src/cockroach.c
