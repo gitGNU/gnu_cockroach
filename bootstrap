@@ -154,7 +154,7 @@ excluded_files=
 
 # File that should exist in the top directory of a checked out hierarchy,
 # but not in a distribution tarball.
-checkout_only_file=README-hacking
+checkout_only_file=README-dev
 
 # Whether to use copies instead of symlinks.
 copy=false

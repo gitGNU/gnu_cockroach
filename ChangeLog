@@ -1,5 +1,14 @@
 2011-10-31  Jose E. Marchesi  <jco@terma.com>
 
+	bootstrap: check for README-dev to decide this is a check-out
+	tree.
+	* bootstrap (checkout_only_file): Check for README-dev to
+	determine this is a check-out tree.
+
+	* README-dev: New file.
+
+2011-10-31  Jose E. Marchesi  <jco@terma.com>
+
 	manual: initial stub.
 	* doc/cockroach.texi: New file.
 	(Overview): Stub chapter with no real contents.
