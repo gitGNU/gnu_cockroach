@@ -16,4 +16,4 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Subdirectories to descend into.
-SUBDIRS = lib po src
+SUBDIRS = doc lib po src

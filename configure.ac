@@ -47,6 +47,7 @@ AM_GNU_GETTEXT_VERSION([0.18.1])
 AM_GNU_GETTEXT([external])
 
 AC_CONFIG_FILES([Makefile \
+           doc/Makefile \
            lib/Makefile \
            po/Makefile.in \
            src/Makefile])
