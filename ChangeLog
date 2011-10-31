@@ -1,4 +1,14 @@
 2011-10-31  Jose E. Marchesi  <jco@terma.com>
 
+	manual: initial stub.
+	* doc/cockroach.texi: New file.
+	(Overview): Stub chapter with no real contents.
+	* doc/fdl.texi: New file.
+	* doc/Makefile.am: New file.
+
+	* src/cockroach.c: Header and copyright notification.
+
+2011-10-31  Jose E. Marchesi  <jemarch@gnu.org>
+
 	* README: New file.
 
