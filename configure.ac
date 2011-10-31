@@ -14,6 +14,8 @@ dnl Must come before AM_INIT_AUTOMAKE.
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([dist-xz])
 
+AC_PROG_RANLIB
+
 # Minimum Autoconf version required.
 AC_PREREQ(2.60)
 
