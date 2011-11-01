@@ -13,9 +13,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+instdir=roach
+
 bin_PROGRAMS = cockroach
+inst_LIBRARIES = libroach.a
+
+libroach_a_SOURCES = libroach.c arch/i386.c
+
+include_HEADERS = cockroach.h
 cockroach_SOURCES = cockroach.c
 
-cockroach_LDADD = @LIBINTL@ ../lib/libcockroach.a
+cockroach_LDADD = @LIBINTL@ ../lib/libcockroach.a libroach.a
 
 AM_CPPFLAGS = -I$(top_srcdir)/lib -I$(top_builddir)/lib

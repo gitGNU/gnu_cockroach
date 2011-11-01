@@ -3,6 +3,7 @@
 /fcntl.h
 /fcntl.in.h
 /fstat.c
+/gettext.h
 /gnulib.mk
 /msvc-inval.c
 /msvc-inval.h

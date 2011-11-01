@@ -22,9 +22,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "cockroach.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <errno.h>
 
 int
 main (int argc, char *const *argv)
 {
+  roach_context_t *ctx = roach_make_context ();
+  pid_t pid;
+
+  if (argc == 1)
+    exit (EXIT_FAILURE);
+
+  pid = roach_spawn_process (ctx, argv[1], argv + 1);
+  if (pid < 0)
+    error (EXIT_FAILURE, errno, "spawn process");
+  for (;;)
+    {
+       pid_t p = roach_wait (ctx);
+       printf ("PID %i %i %i\n", p, roach_get_sc (ctx),
+               roach_entering_sc_p (ctx));
+    }
   return 0;
 }
