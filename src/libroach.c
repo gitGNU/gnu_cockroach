@@ -132,18 +132,18 @@ roach_spawn_process (roach_context_t *ctx, char const *exec, char *const *argv)
       exit (EXIT_FAILURE);
     }
   ctx->pid = pid;
-  wait (NULL);
+  wait ();
   return pid;
 }
 
 int
-roach_wait (roach_context_t *ctx)
+roach_wait (roach_context_t *ctx, int *status)
 {
   int ret, syscall;
   roach_hook_t *hook;
 
   ptrace (PTRACE_SYSCALL, ctx->pid, NULL, NULL);
-  ret = waitpid (ctx->pid, NULL, NULL);
+  ret = waitpid (ctx->pid, status, NULL);
 
   if (ret > 0)
     ctx->entering_sc = !ctx->entering_sc;

@@ -52,6 +52,11 @@ main (int argc, char *const *argv)
     error (EXIT_FAILURE, errno, "spawn process");
 
   for (;;)
-    roach_wait (ctx);
+    {
+      int status;
+      roach_wait (ctx, &status);
+      if (WIFEXITED (status))
+        break;
+    }
   return 0;
 }

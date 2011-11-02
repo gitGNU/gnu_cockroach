@@ -73,7 +73,7 @@ void roach_ctx_rm_hook (roach_context_t *ctx, roach_hook_t *hook);
 
 pid_t roach_spawn_process (roach_context_t *ctx, char const *exec,
                          char *const *argv);
-int roach_wait (roach_context_t *ctx);
+int roach_wait (roach_context_t *ctx, int *status);
 
 bool roach_entering_sc_p (roach_context_t *ctx);
 
