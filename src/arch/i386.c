@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <sys/reg.h>
+#include <string.h>
 
 #include "../cockroach.h"
 
@@ -90,16 +91,78 @@ roach_get_sc_arg (roach_context_t *ctx, int arg)
   return ptrace (PTRACE_POKEUSER, ctx->pid, 4 * reg, NULL);
 }
 
+#define OFFSET(x) ((unsigned int) x & (sizeof (long) - 1))
+
 int
-roach_write_mem (roach_context_t *ctx, const void const *data, size_t len)
+roach_write_mem (roach_context_t *ctx, const char const *data,
+                 const char const *addr, size_t len)
 {
-  /* TODO */
+  size_t i;
+  if (OFFSET (addr))
+    {
+      long tmp;
+      tmp = ptrace (PTRACE_PEEKDATA, ctx->pid, OFFSET (addr), NULL);
+
+      memcpy (&tmp + OFFSET (addr), data, sizeof (long) - OFFSET (addr));
+
+      ptrace (PTRACE_POKEDATA, ctx->pid, OFFSET (addr), tmp);
+
+      len -= sizeof (long) - OFFSET (addr);
+      data += sizeof (long) - OFFSET (addr);
+      addr += sizeof (long) - OFFSET (addr);
+    }
+
+  for (i = 0; i < len / sizeof (long); i++)
+    {
+      ptrace (PTRACE_POKEDATA, ctx->pid, addr, *((long *) data++));
+      len -= sizeof (long);
+      addr += sizeof (long);
+    }
+
+  if (len)
+    {
+      long tmp;
+      tmp = ptrace (PTRACE_PEEKDATA, ctx->pid, addr, NULL);
+      memcpy (&tmp, data, len);
+      ptrace (PTRACE_POKEDATA, ctx->pid, sizeof (long), tmp);
+    }
+
+  return 0;
 }
 
 int
-roach_read_mem (roach_context_t *ctx, void *data, size_t len)
+roach_read_mem (roach_context_t *ctx, char *data,
+                const char const *addr, size_t len)
 {
-  /* TODO */
+  size_t i;
+  if (OFFSET (addr))
+    {
+      long tmp;
+      tmp = ptrace (PTRACE_PEEKDATA, ctx->pid, OFFSET (addr), NULL);
+
+      memcpy (data, &tmp + OFFSET (addr), sizeof (long) - OFFSET (addr));
+
+      len -= sizeof (long) - OFFSET (addr);
+      data += sizeof (long) - OFFSET (addr);
+      addr += sizeof (long) - OFFSET (addr);
+    }
+
+  for (i = 0; i < len / sizeof (long); i++)
+    {
+      *((long *) data++) = ptrace (PTRACE_PEEKDATA, ctx->pid,
+                                   addr, NULL);
+      len -= sizeof (long);
+      addr += sizeof (long);
+    }
+
+  if (len)
+    {
+      long tmp;
+      tmp = ptrace (PTRACE_PEEKDATA, ctx->pid, addr, NULL);
+      memcpy (data, tmp, len);
+    }
+
+  return 0;
 }
 
 int

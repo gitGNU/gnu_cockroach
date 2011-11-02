@@ -82,8 +82,10 @@ int roach_get_sc (roach_context_t *ctx);
 int roach_set_sc (roach_context_t *ctx, int syscall);
 int roach_get_sc_arg (roach_context_t *ctx, int arg);
 int roach_set_sc_arg (roach_context_t *ctx, int arg, void *data);
-int roach_write_mem (roach_context_t *ctx, const void const *data, size_t len);
-int roach_read_mem (roach_context_t *ctx, void *data, size_t len);
+int roach_write_mem (roach_context_t *ctx, const char const *data,
+                     const char const *addr, size_t len);
+int roach_read_mem (roach_context_t *ctx, char *data,
+                    const char const *addr, size_t len);
 
 /* Facilities.  */
 int roach_syscall_inhibit (roach_context_t *ctx, void *data);
