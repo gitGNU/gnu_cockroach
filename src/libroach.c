@@ -23,9 +23,10 @@
 #include <sys/ptrace.h>
 
 roach_hook_t *
-roach_make_hook (enum SYSCALL_TYPE type, int *syscalls, hook_func_t *hook,
+roach_make_hook (enum SYSCALL_TYPE type, int *syscalls, hook_func_t hook,
                  void *data)
 {
+  int max_sc = 0, *syscall;
   roach_hook_t *r = malloc (sizeof *r);
   if (r == NULL)
     return r;
@@ -34,12 +35,21 @@ roach_make_hook (enum SYSCALL_TYPE type, int *syscalls, hook_func_t *hook,
   r->type = type;
   r->hook = hook;
   r->data = data;
-  r->syscalls = roach_bitmap_make (100);
+
+  for (syscall = syscalls; *syscall; syscall++)
+    if (*syscall > max_sc)
+      max_sc = *syscall;
+
+  r->syscalls = roach_bitmap_make (max_sc);
   if (r->syscalls == NULL)
     {
       free (r);
       return NULL;
     }
+
+  for (syscall = syscalls; *syscall; syscall++)
+    roach_bitmap_set (r->syscalls, *syscall);
+
   return r;
 }
 
@@ -75,11 +85,12 @@ roach_ctx_add_hook (roach_context_t *ctx, roach_hook_t *hook)
 {
   hook->next = NULL;
 
-  if (ctx->hooks = NULL)
+  if (ctx->hooks == NULL)
     ctx->hooks = hook;
   else
     {
       roach_hook_t *it = ctx->hooks;
+
       while (it->next)
         it = it->next;
 
@@ -128,12 +139,28 @@ roach_spawn_process (roach_context_t *ctx, char const *exec, char *const *argv)
 int
 roach_wait (roach_context_t *ctx)
 {
-  int ret;
+  int ret, syscall;
+  roach_hook_t *hook;
+
   ptrace (PTRACE_SYSCALL, ctx->pid, NULL, NULL);
   ret = waitpid (ctx->pid, NULL, NULL);
 
   if (ret > 0)
     ctx->entering_sc = !ctx->entering_sc;
+
+  syscall = roach_get_sc (ctx);
+  for (hook = ctx->hooks; hook; hook = hook->next)
+    {
+      if (!ctx->entering_sc && hook->type == HOOK_ENTER)
+        continue;
+
+      if (ctx->entering_sc && hook->type == HOOK_EXIT)
+        continue;
+
+      /* What to do with the return code?  */
+      if (roach_bitmap_p (hook->syscalls, syscall))
+        hook->hook (ctx, ctx->entering_sc, hook->data);
+    }
 
   return ret;
 }

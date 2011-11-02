@@ -27,23 +27,31 @@
 #include <stdio.h>
 #include <errno.h>
 
+static int
+intercept_read (roach_context_t *ctx, bool enter, void *data)
+{
+  printf ("%s Read!\n", enter ? "Entering" : "Exiting");
+}
+
 int
 main (int argc, char *const *argv)
 {
+  int syscalls[] = {3, 0};
   roach_context_t *ctx = roach_make_context ();
   pid_t pid;
+  roach_hook_t *hook = roach_make_hook (HOOK_BOTH, syscalls,
+                                        intercept_read, NULL);
 
   if (argc == 1)
     exit (EXIT_FAILURE);
 
+  roach_ctx_add_hook (ctx, hook);
+
   pid = roach_spawn_process (ctx, argv[1], argv + 1);
   if (pid < 0)
     error (EXIT_FAILURE, errno, "spawn process");
+
   for (;;)
-    {
-       pid_t p = roach_wait (ctx);
-       printf ("PID %i %i %i\n", p, roach_get_sc (ctx),
-               roach_entering_sc_p (ctx));
-    }
+    roach_wait (ctx);
   return 0;
 }

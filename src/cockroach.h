@@ -48,7 +48,7 @@ typedef struct s_hook
   /* Define which syscalls are intercepted.  */
   bitmap_t *syscalls;
 
-  hook_func_t *hook;
+  hook_func_t hook;
   void *data;
 }
 roach_hook_t;
@@ -62,7 +62,7 @@ typedef struct roach_context_s
 roach_context_t;
 
 roach_hook_t *roach_make_hook (enum SYSCALL_TYPE type, int *syscalls,
-                               hook_func_t *hook, void *data);
+                               hook_func_t hook, void *data);
 void roach_free_hook (roach_hook_t *ctx);
 
 roach_context_t *roach_make_context ();
