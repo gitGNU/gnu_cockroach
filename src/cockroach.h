@@ -24,17 +24,13 @@
 # include <stddef.h>
 # include <sys/types.h>
 # include <stdbool.h>
+# include "bitmap.h"
 
 enum SYSCALL_TYPE
 {
   HOOK_ENTER = 1,
   HOOK_EXIT,
   HOOK_BOTH
-};
-
-struct bitmap
-{
-  /* TODO.  */
 };
 
 struct roach_context_s;
@@ -50,7 +46,7 @@ typedef struct s_hook
   enum SYSCALL_TYPE type;
 
   /* Define which syscalls are intercepted.  */
-  struct bitmap syscalls;
+  bitmap_t *syscalls;
 
   hook_func_t *hook;
   void *data;

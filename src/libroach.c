@@ -32,17 +32,21 @@ roach_make_hook (enum SYSCALL_TYPE type, int *syscalls, hook_func_t *hook,
 
   r->next = NULL;
   r->type = type;
-  r->syscalls;
   r->hook = hook;
   r->data = data;
-
+  r->syscalls = roach_bitmap_make (100);
+  if (r->syscalls == NULL)
+    {
+      free (r);
+      return NULL;
+    }
   return r;
 }
 
 void
 roach_free_hook (roach_hook_t *ctx)
 {
-  ctx->syscalls;
+  roach_bitmap_free (ctx->syscalls);
   free (ctx);
 }
 

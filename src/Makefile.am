@@ -18,9 +18,10 @@ instdir=roach
 bin_PROGRAMS = cockroach
 inst_LIBRARIES = libroach.a
 
-libroach_a_SOURCES = libroach.c arch/i386.c
+include_HEADERS = bitmap.h cockroach.h
 
-include_HEADERS = cockroach.h
+libroach_a_SOURCES = bitmap.c libroach.c arch/i386.c
+
 cockroach_SOURCES = cockroach.c
 
 cockroach_LDADD = @LIBINTL@ ../lib/libcockroach.a libroach.a
