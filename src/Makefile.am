@@ -13,10 +13,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-instdir=roach
 
 bin_PROGRAMS = cockroach
-inst_LIBRARIES = libroach.a
+noinst_LIBRARIES = libroach.a
 
 include_HEADERS = bitmap.h cockroach.h
 
