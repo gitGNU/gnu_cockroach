@@ -45,7 +45,7 @@ roach_set_sc (roach_context_t *ctx, int syscall)
 int
 roach_set_sc_ret (roach_context_t *ctx, int retval)
 {
-  return ptrace (PTRACE_POKEUSER, ctx->pid, 4 * ORIG_EAX, retval);
+  return ptrace (PTRACE_POKEUSER, ctx->pid, 4 * EAX, retval);
 }
 
 int
@@ -111,7 +111,7 @@ roach_get_sc_arg (roach_context_t *ctx, int arg)
       return -1;
     }
 
-  return ptrace (PTRACE_POKEUSER, ctx->pid, 4 * reg, NULL);
+  return ptrace (PTRACE_PEEKUSER, ctx->pid, 4 * reg, NULL);
 }
 
 #define OFFSET(x) ((unsigned int) x & (sizeof (long) - 1))
