@@ -30,13 +30,13 @@ needed_size (size_t size)
 }
 
 bitmap_t *
-roach_bitmap_make (size_t size)
+roach_bitmap_make (size_t n_elements)
 {
   bitmap_t *bm = malloc (sizeof *bm);
   if (bm == NULL)
     return NULL;
 
-  bm->size = needed_size (size);
+  bm->size = needed_size (n_elements);
 
   bm->data = malloc (bm->size);
   if (bm->data == NULL)
@@ -45,8 +45,8 @@ roach_bitmap_make (size_t size)
       return NULL;
     }
 
-  bm->size = size;
-  memset (bm->data, 0, bm->size);
+  bm->n_elements = n_elements;
+  memset (bm->data, 0, bm->size * BUCKET_SIZE);
 
   return bm;
 }
@@ -101,3 +101,22 @@ roach_bitmap_p (bitmap_t * bm, size_t ind)
   return bm->data[bucket] & (1 << offset);
 }
 
+int
+roach_bitmap_flip (bitmap_t * bm, size_t ind)
+{
+  if (roach_bitmap_p (bm, ind))
+    roach_bitmap_unset (bm, ind);
+  else
+    roach_bitmap_set (bm, ind);
+}
+
+int
+roach_bitmap_flip_all (bitmap_t *bm)
+{
+  size_t i;
+  for (i = 0; i < bm->size - 1; i++)
+    bm->data[i] = ~bm->data[i];
+
+  /* Last one may not be completely allocated, do not set unused bits.  */
+  bm->data[i] = ~bm->data[i] & ((1 << (bm->n_elements % BUCKET_SIZE)) - 1);
+}

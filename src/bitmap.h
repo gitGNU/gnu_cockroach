@@ -26,13 +26,16 @@
 typedef struct bitmap_s
 {
   size_t size;
+  size_t n_elements;
   unsigned int *data;
 } bitmap_t;
 
-bitmap_t *roach_bitmap_make (size_t size);
+bitmap_t *roach_bitmap_make (size_t);
 void roach_bitmap_free (bitmap_t *);
 int roach_bitmap_set (bitmap_t *, size_t);
 int roach_bitmap_unset (bitmap_t *, size_t);
 int roach_bitmap_p (bitmap_t *, size_t);
+int roach_bitmap_flip (bitmap_t *, size_t);
+int roach_bitmap_flip_all (bitmap_t *);
 
 #endif
