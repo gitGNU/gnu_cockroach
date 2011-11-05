@@ -40,6 +40,12 @@ roach_set_sc (roach_context_t *ctx, int syscall)
 }
 
 int
+roach_set_sc_ret (roach_context_t *ctx, int retval)
+{
+  return ptrace (PTRACE_POKEUSER, ctx->pid, 4 * ORIG_EAX, retval);
+}
+
+int
 roach_set_sc_arg (roach_context_t *ctx, int arg, void *data)
 {
   int reg = 0;
