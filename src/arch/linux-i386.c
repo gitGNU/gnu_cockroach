@@ -57,8 +57,15 @@ roach_set_sc_arg (roach_context_t *ctx, int arg, void *data)
       reg = EDX;
       break;
 
+    case 4:
+      reg = ESI;
+      break;
+
+    case 5:
+      reg = EDI;
+      break;
+
     default:
-      /* TODO */
       return -1;
     }
 
@@ -83,8 +90,15 @@ roach_get_sc_arg (roach_context_t *ctx, int arg)
       reg = EDX;
       break;
 
+    case 4:
+      reg = ESI;
+      break;
+
+    case 5:
+      reg = EDI;
+      break;
+
     default:
-      /* TODO */
       return -1;
     }
 

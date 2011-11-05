@@ -21,9 +21,8 @@
 #ifndef ARCH_HAS_SYSCALL_INHIBIT
 
 int
-roach_syscall_inhibit (roach_context_t *ctx, void *data)
+roach_syscall_inhibit (roach_context_t *ctx, bool enter, void *data)
 {
-  /* TODO */
 }
 
 #endif

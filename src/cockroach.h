@@ -88,6 +88,6 @@ int roach_read_mem (roach_context_t *ctx, char *data,
                     const char const *addr, size_t len);
 
 /* Facilities.  */
-int roach_syscall_inhibit (roach_context_t *ctx, void *data);
+int roach_syscall_inhibit (roach_context_t *ctx, bool enter, void *data);
 
 #endif
