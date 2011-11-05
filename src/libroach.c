@@ -70,6 +70,7 @@ roach_make_context ()
 
   c->hooks = NULL;
   c->entering_sc = false;
+  c->last_syscall = 0;
 
   return c;
 }
@@ -131,8 +132,8 @@ roach_spawn_process (roach_context_t *ctx, char const *exec, char *const *argv)
       execv (exec, argv);
       exit (EXIT_FAILURE);
     }
-  ctx->pid = pid;
   wait ();
+  ctx->pid = pid;
   return pid;
 }
 
@@ -173,4 +174,19 @@ bool
 roach_entering_sc_p (roach_context_t *ctx)
 {
   return ctx->entering_sc;
+}
+
+int
+roach_reg_syscall (roach_context_t *ctx, int syscall, hook_func_t hook_func,
+                   void *data)
+{
+  roach_hook_t *hook;
+  int syscalls[] = {syscall, 0};
+
+  hook = roach_make_hook (HOOK_BOTH, syscalls, hook_func, -1);
+  if (hook == NULL)
+    return -1;
+
+  roach_ctx_add_hook (ctx, hook);
+  return 0;
 }

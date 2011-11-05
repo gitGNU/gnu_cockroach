@@ -27,25 +27,17 @@
 #include <stdio.h>
 #include <errno.h>
 
-static int
-intercept_read (roach_context_t *ctx, bool enter, void *data)
-{
-  printf ("%s Read!\n", enter ? "Entering" : "Exiting");
-}
-
 int
 main (int argc, char *const *argv)
 {
-  int syscalls[] = {3, 0};
   roach_context_t *ctx = roach_make_context ();
   pid_t pid;
-  roach_hook_t *hook = roach_make_hook (HOOK_BOTH, syscalls,
-                                        intercept_read, NULL);
 
   if (argc == 1)
     exit (EXIT_FAILURE);
 
-  roach_ctx_add_hook (ctx, hook);
+  if (roach_reg_syscall (ctx, 4, roach_syscall_inhibit, (void *) -1) < 0)
+    exit (EXIT_FAILURE);
 
   pid = roach_spawn_process (ctx, argv[1], argv + 1);
   if (pid < 0)
@@ -58,5 +50,6 @@ main (int argc, char *const *argv)
       if (WIFEXITED (status))
         break;
     }
+
   return 0;
 }
