@@ -1,5 +1,5 @@
 /*
-   i386 arch specific hooks
+   linux i386 arch specific hooks
 
    Copyright (C) 2011 Giuseppe Scrivano <gscrivano@gnu.org>
 

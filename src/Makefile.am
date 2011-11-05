@@ -19,7 +19,7 @@ noinst_LIBRARIES = libroach.a
 
 include_HEADERS = bitmap.h cockroach.h
 
-libroach_a_SOURCES = bitmap.c libroach.c arch/i386.c
+libroach_a_SOURCES = bitmap.c libroach.c arch/linux-i386.c
 
 cockroach_SOURCES = cockroach.c
 
