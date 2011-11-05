@@ -159,7 +159,7 @@ roach_read_mem (roach_context_t *ctx, char *data,
     {
       long tmp;
       tmp = ptrace (PTRACE_PEEKDATA, ctx->pid, addr, NULL);
-      memcpy (data, tmp, len);
+      memcpy (data, (void *) tmp, len);
     }
 
   return 0;
