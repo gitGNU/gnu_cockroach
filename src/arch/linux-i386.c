@@ -165,8 +165,4 @@ roach_read_mem (roach_context_t *ctx, char *data,
   return 0;
 }
 
-int
-roach_syscall_inhibit (roach_context_t *ctx, void *data)
-{
-  /* TODO */
-}
+#include "linux-generic.c"
