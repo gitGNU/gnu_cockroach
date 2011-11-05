@@ -23,6 +23,14 @@
 int
 roach_syscall_inhibit (roach_context_t *ctx, bool enter, void *data)
 {
+  /* Use the sys_getpid=20 syscall instead of the original one.
+   DATA will be used as return value from the syscall.  */
+   if (enter)
+    roach_set_sc (ctx, 20);
+  else
+    roach_set_sc_ret (ctx, data);
+
+   return 0;
 }
 
 #endif
