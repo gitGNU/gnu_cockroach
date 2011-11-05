@@ -38,7 +38,7 @@ roach_bitmap_make (size_t n_elements)
 
   bm->size = needed_size (n_elements);
 
-  bm->data = malloc (bm->size);
+  bm->data = malloc (bm->size * BUCKET_SIZE);
   if (bm->data == NULL)
     {
       free (bm);
