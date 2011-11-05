@@ -148,7 +148,11 @@ roach_wait (roach_context_t *ctx, int *status)
   if (ret > 0)
     ctx->entering_sc = !ctx->entering_sc;
 
-  syscall = roach_get_sc (ctx);
+  if (ctx->entering_sc)
+    ctx->last_syscall = syscall = roach_get_sc (ctx);
+  else
+    syscall = ctx->last_syscall;
+
   for (hook = ctx->hooks; hook; hook = hook->next)
     {
       if (!ctx->entering_sc && hook->type == HOOK_ENTER)

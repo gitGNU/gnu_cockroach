@@ -57,6 +57,7 @@ typedef struct roach_context_s
 {
   int pid;
   roach_hook_t *hooks;
+  int last_syscall;
   bool entering_sc;
 }
 roach_context_t;

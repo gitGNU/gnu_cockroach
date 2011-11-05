@@ -30,6 +30,9 @@
 int
 roach_get_sc (roach_context_t *ctx)
 {
+  if (! ctx->entering_sc)
+    return ctx->last_syscall;
+
   return ptrace (PTRACE_PEEKUSER, ctx->pid, 4 * ORIG_EAX, syscall);
 }
 
