@@ -188,4 +188,4 @@ roach_read_mem (roach_context_t *ctx, char *data,
   return 0;
 }
 
-#include "linux-generic.c"
+#include "linux_generic.c"
