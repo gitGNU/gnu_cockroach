@@ -52,5 +52,6 @@ AC_CONFIG_FILES([Makefile \
            doc/Makefile \
            lib/Makefile \
            po/Makefile.in \
-           src/Makefile])
+           src/Makefile \
+           tests/Makefile])
 AC_OUTPUT

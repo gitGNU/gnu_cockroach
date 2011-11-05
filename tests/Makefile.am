@@ -1,5 +1,5 @@
-# Makefile for the top-level directory of GNU cockroach.
-# 
+# Makefile for the test directory of GNU cockroach.
+#
 # Copyright 2011 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -15,5 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Subdirectories to descend into.
-SUBDIRS = doc lib po src tests
+check_PROGRAMS = test_bitmap
+
+AM_CFLAGS = -I../src
+LDADD = @LIBINTL@ ../lib/libcockroach.a ../src/libroach.a
+
+test_bitmap_SOURCES = test_bitmap.c
+
+TESTS = $(check_PROGRAMS)
