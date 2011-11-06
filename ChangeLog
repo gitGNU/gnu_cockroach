@@ -1,5 +1,21 @@
 2011-11-06  Jose E. Marchesi  <jemarch@gnu.org>
 
+	gettextized and getoptized.
+	* src/Makefile.am (AM_CPPFLAGS): Define LOCALEDIR.
+
+	* src/cockroach.c (long_options): New variable.
+	(cockroach_print_help): New function.
+	(cockroach_print_version): New function.
+	(main): Process command line arguments with getopt.
+	(main): Initialize gettext, the program name and use close_stdout.
+
+	* configure.ac: Generate src/config.h.
+
+	* bootstrap.conf (gnulib_modules): Modules getopt-gnu, closeout,
+	gettext, gettext-h, xalloc and progname added.
+
+2011-11-06  Jose E. Marchesi  <jemarch@gnu.org>
+
 	Support for multiple hardware architectures, and x86_64 added.
 	* src/Makefile.am (EXTRA_libroach_a_SOURCES): Defined to allow
 	conditional compilation depending on the host architecture.

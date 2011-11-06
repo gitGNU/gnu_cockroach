@@ -13,6 +13,7 @@ AC_INIT([GNU cockroach], [0.1], [bug-cockroach@gnu.org])
 dnl Must come before AM_INIT_AUTOMAKE.
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([dist-xz])
+AM_CONFIG_HEADER(src/config.h)
 
 AC_PROG_RANLIB
 

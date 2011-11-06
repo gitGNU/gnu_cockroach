@@ -1,6 +1,6 @@
 #! /bin/sh
 # Print a version string.
-scriptversion=2011-08-11.17; # UTC
+scriptversion=2011-11-06.17; # UTC
 
 # Bootstrap this package from checked-out sources.
 
