@@ -26,7 +26,7 @@
 # include <stdbool.h>
 # include "bitmap.h"
 
-enum SYSCALL_TYPE
+enum HOOK_TYPE
 {
   HOOK_ENTER = 1,
   HOOK_EXIT,
@@ -42,7 +42,7 @@ typedef struct s_hook
   struct s_hook *next;
 
   /* Describe in which cases the hook is valid.  */
-  enum SYSCALL_TYPE type;
+  enum HOOK_TYPE type;
 
   /* Define which syscalls are intercepted.  */
   bitmap_t *syscalls;
@@ -61,7 +61,7 @@ typedef struct roach_context_s
 }
 roach_context_t;
 
-roach_hook_t *roach_make_hook (enum SYSCALL_TYPE type, int *syscalls,
+roach_hook_t *roach_make_hook (enum HOOK_TYPE type, int *syscalls,
                                hook_func_t hook, void *data);
 void roach_free_hook (roach_hook_t *ctx);
 

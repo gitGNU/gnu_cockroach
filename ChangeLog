@@ -1,5 +1,14 @@
 2011-11-06  Jose E. Marchesi  <jemarch@gnu.org>
 
+	SYSCALL_TYPE renamed to HOOK_TYPE.
+	* src/cockroach.h (enum HOOK_TYPE): Renamed from enum
+	SYSCALL_TYPE.
+	(s_hook): Use HOOK_TYPE.
+	(roach_make_hook): Likewise.
+	* src/libroach.c (roach_make_hook): Likewise.
+
+2011-11-06  Jose E. Marchesi  <jemarch@gnu.org>
+
 	Legal and minor cosmetic changes.
 	* README-dev: Copyright notification fixed.
 

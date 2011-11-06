@@ -23,7 +23,7 @@
 #include <sys/ptrace.h>
 
 roach_hook_t *
-roach_make_hook (enum SYSCALL_TYPE type, int *syscalls, hook_func_t hook,
+roach_make_hook (enum HOOK_TYPE type, int *syscalls, hook_func_t hook,
                  void *data)
 {
   int max_sc = 0, *syscall;
