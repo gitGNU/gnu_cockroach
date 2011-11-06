@@ -1,3 +1,14 @@
+2011-11-06  Jose E. Marchesi  <jemarch@gnu.org>
+
+	Legal and minor cosmetic changes.
+	* README-dev: Copyright notification fixed.
+
+	* AUTHORS: Initial content.
+
+	* Changelog: Copyright notification added at the end.
+
+	* src/cockroach.c: Unify source headers.
+
 2011-10-31  Jose E. Marchesi  <jco@terma.com>
 
 	bootstrap: check for README-dev to decide this is a check-out
@@ -21,3 +32,9 @@
 
 	* README: New file.
 
+Copyright 2011 Jose E. Marchesi
+Copyright 2011 Giuseppe Scrivano
+
+Copying and distribution of this file, with or without modification, are
+permitted in any medium without royalty provided the copyright notice
+and this notice are preserved.
