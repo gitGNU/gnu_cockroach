@@ -1,5 +1,5 @@
 /*
-   cockroach definitions.
+   libroach definitions.
 
    Copyright (C) 2011 Jose E. Marchesi <jemarch@gnu.org>
    Copyright (C) 2011 Giuseppe Scrivano <gscrivano@gnu.org>
@@ -18,8 +18,8 @@
    along with the program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef COCKROACH_H
-# define COCKROACH_H
+#ifndef ROACH_H
+# define ROACH_H
 
 # include <stddef.h>
 # include <sys/types.h>
@@ -93,4 +93,4 @@ int roach_syscall_inhibit (roach_context_t *ctx, bool enter, void *data);
 int roach_reg_syscall (roach_context_t *ctx, int syscall,
                        hook_func_t hook_func, void *data);
 
-#endif
+#endif /* !ROACH_H */

@@ -1,5 +1,5 @@
 /*
-   cockroach core.
+   libroach core.
 
    Copyright (C) 2011 Jose E. Marchesi <jemarch@gnu.org>
    Copyright (C) 2011 Giuseppe Scrivano <gscrivano@gnu.org>
@@ -18,7 +18,7 @@
    along with the program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "cockroach.h"
+#include "roach.h"
 #include <stdlib.h>
 #include <sys/ptrace.h>
 

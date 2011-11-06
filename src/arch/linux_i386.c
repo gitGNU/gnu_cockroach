@@ -25,7 +25,7 @@
 #include <sys/reg.h>
 #include <string.h>
 
-#include "../cockroach.h"
+#include "../roach.h"
 
 int
 roach_get_sc (roach_context_t *ctx)

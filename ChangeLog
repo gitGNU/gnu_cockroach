@@ -1,5 +1,22 @@
 2011-11-06  Jose E. Marchesi  <jemarch@gnu.org>
 
+	Build libroach and the cockroach utility.
+	* src/arch/linux_i386.c: Include roach.h.
+
+	* src/Makefile.am: Copyright updated.
+	(include_HEADERS): roach.h from cockroach.h.
+	(libroach_a_SOURCES): roach.c from libroach.c.
+
+	* src/cockroach.c: Include roach.h.
+
+	* src/roach.h: Renamed from src/cockroach.h.
+
+	* src/roach.c: Renamed from src/libroach.c and description
+	updated.
+	Include roach.h instead of cockroach.h.
+
+2011-11-06  Jose E. Marchesi  <jemarch@gnu.org>
+
 	SYSCALL_TYPE renamed to HOOK_TYPE.
 	* src/cockroach.h (enum HOOK_TYPE): Renamed from enum
 	SYSCALL_TYPE.

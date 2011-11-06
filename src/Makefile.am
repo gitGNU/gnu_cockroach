@@ -1,4 +1,5 @@
-# Copyright 2011 Free Software Foundation, Inc.
+# Copyright 2011 Giuseppe Scrivano.
+# Copyright 2011 Jose E. Marchesi.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,10 +18,10 @@
 bin_PROGRAMS = cockroach
 noinst_LIBRARIES = libroach.a
 
-include_HEADERS = bitmap.h cockroach.h
+include_HEADERS = bitmap.h roach.h
 
 EXTRA_DIST = arch/linux_generic.c
-libroach_a_SOURCES = bitmap.c libroach.c arch/linux_i386.c
+libroach_a_SOURCES = bitmap.c roach.c arch/linux_i386.c
 
 cockroach_SOURCES = cockroach.c
 

@@ -18,7 +18,7 @@
    along with the program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "cockroach.h"
+#include "roach.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
