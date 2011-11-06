@@ -37,10 +37,10 @@ gl_INIT
 # Detect the architecture of the host machine and determine whether it
 # is a valid one.
 AC_CANONICAL_HOST
-case "${host}" in
-     i[3456]86*) ROACH_ARCH=x86_32;;
-     x86_64*) ROACH_ARCH=x86_64;;              
-     *) AC_ERROR([Unsupported architecture ${host}])
+case ${host} in
+     i[[3456]]86-*-linux-*) ROACH_ARCH=x86_32;;
+     x86_64-*-linux-*) ROACH_ARCH=x86_64;;
+     *) AC_ERROR([Unsupported architecture "${host}"]) ;;
 esac
 AC_SUBST([ROACH_ARCH])
 AM_CONDITIONAL([ROACH_ARCH_X86_32],[test "$ROACH_ARCH" = "x86_32"])
