@@ -1,5 +1,10 @@
 2011-11-06  Jose E. Marchesi  <jemarch@gnu.org>
 
+	.gitignored update.
+	* .gitignore: Updated.
+
+2011-11-06  Jose E. Marchesi  <jemarch@gnu.org>
+
 	gettextized and getoptized.
 	* src/Makefile.am (AM_CPPFLAGS): Define LOCALEDIR.
 
