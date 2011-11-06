@@ -1,5 +1,8 @@
 2011-11-06  Giuseppe Scrivano  <gscrivano@gnu.org>
 
+	* tests/Makefile.am (AM_CFLAGS): Specify the absolute path to src as
+	argument to the compiler.
+
 	* src/cockroach.c (cockroach_print_version): List authors in alphabetical
 	order.
 
