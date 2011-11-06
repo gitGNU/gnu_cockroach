@@ -1,5 +1,8 @@
 2011-11-06  Giuseppe Scrivano  <gscrivano@gnu.org>
 
+	* src/cockroach.c (cockroach_print_version): List authors in alphabetical
+	order.
+
 	* configure.ac: Fix the regex to detect the i[3456]86-*-linux-* host.
 
 	* src/cockroach.c: Include <locale.h> for LC_ALL.

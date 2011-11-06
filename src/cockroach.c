@@ -112,7 +112,7 @@ There is NO WARRANTY, to the extent permitted by law.\n"), "2011", "2011");
 
   puts (_("\
 \n\
-Written by Giuseppe Scrivano and Jose E. Marchesi."));
+Written by Jose E. Marchesi and Giuseppe Scrivano."));
 }
 
 int
