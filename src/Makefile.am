@@ -20,7 +20,7 @@ noinst_LIBRARIES = libroach.a
 
 include_HEADERS = bitmap.h roach.h
 
-EXTRA_DIST = arch/linux_generic.c
+EXTRA_DIST = arch/linux_generic.c arch/linux_i386.c arch/linux_x86_64.c
 libroach_a_SOURCES = bitmap.c roach.c
 
 if ROACH_ARCH_X86_32

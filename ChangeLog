@@ -1,5 +1,8 @@
 2011-11-06  Giuseppe Scrivano  <gscrivano@gnu.org>
 
+	* src/Makefile.am (EXTRA_DIST): Add arch/linux_i386.c and
+	arch/linux_x86_64.c.
+
 	* tests/Makefile.am (AM_CFLAGS): Specify the absolute path to src as
 	argument to the compiler.
 
