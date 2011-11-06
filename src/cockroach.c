@@ -21,6 +21,7 @@
 #include <config.h>
 
 #include <getopt.h>
+#include <locale.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
