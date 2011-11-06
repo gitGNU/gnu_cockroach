@@ -21,7 +21,15 @@ noinst_LIBRARIES = libroach.a
 include_HEADERS = bitmap.h roach.h
 
 EXTRA_DIST = arch/linux_generic.c
-libroach_a_SOURCES = bitmap.c roach.c arch/linux_i386.c
+libroach_a_SOURCES = bitmap.c roach.c
+
+if ROACH_ARCH_X86_32
+   libroach_a_SOURCES += arch/linux_i386.c
+endif
+
+if ROACH_ARCH_X86_64
+   libroach_a_SOURCES += arch/linux_x86_64.c
+endif
 
 cockroach_SOURCES = cockroach.c
 

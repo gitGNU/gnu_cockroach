@@ -18,174 +18,22 @@
    along with the program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <sys/ptrace.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <errno.h>
 #include <sys/reg.h>
-#include <string.h>
-
 #include "../roach.h"
 
-int
-roach_get_sc (roach_context_t *ctx)
-{
-  if (! ctx->entering_sc)
-    return ctx->last_syscall;
+/* The following constants describe the layout of the USER section of
+   the child process bein peek/poked and are used in the
+   linux_generic.c file.  They are based on the contents of
+   sys/user.h */
 
-  return ptrace (PTRACE_PEEKUSER, ctx->pid, 4 * ORIG_EAX, syscall);
-}
-
-int
-roach_set_sc (roach_context_t *ctx, int syscall)
-{
-  return ptrace (PTRACE_POKEUSER, ctx->pid, 4 * ORIG_EAX, syscall);
-}
-
-int
-roach_set_sc_ret (roach_context_t *ctx, int retval)
-{
-  return ptrace (PTRACE_POKEUSER, ctx->pid, 4 * EAX, retval);
-}
-
-int
-roach_set_sc_arg (roach_context_t *ctx, int arg, void *data)
-{
-  int reg = 0;
-  switch (arg)
-    {
-    case 1:
-      reg = EBX;
-      break;
-
-    case 2:
-      reg = ECX;
-      break;
-
-    case 3:
-      reg = EDX;
-      break;
-
-    case 4:
-      reg = ESI;
-      break;
-
-    case 5:
-      reg = EDI;
-      break;
-
-    default:
-      return -1;
-    }
-
-  return ptrace (PTRACE_POKEUSER, ctx->pid, 4 * reg, data);
-}
-
-int
-roach_get_sc_arg (roach_context_t *ctx, int arg)
-{
-  int reg = 0;
-  switch (arg)
-    {
-    case 1:
-      reg = EBX;
-      break;
-
-    case 2:
-      reg = ECX;
-      break;
-
-    case 3:
-      reg = EDX;
-      break;
-
-    case 4:
-      reg = ESI;
-      break;
-
-    case 5:
-      reg = EDI;
-      break;
-
-    default:
-      return -1;
-    }
-
-  return ptrace (PTRACE_PEEKUSER, ctx->pid, 4 * reg, NULL);
-}
-
+#define SC_REG_SIZE 4
+#define SC_REG_ADDR  (SC_REG_SIZE * ORIG_EAX)
+#define SC_RET_ADDR  (SC_REG_SIZE * ORIG_EAX)
+#define SC_ARG1_ADDR (SC_REG_SIZE * EBX)
+#define SC_ARG2_ADDR (SC_REG_SIZE * ECX)
+#define SC_ARG3_ADDR (SC_REG_SIZE * EDX)
+#define SC_ARG4_ADDR (SC_REG_SIZE * ESI)
+#define SC_ARG5_ADDR (SC_REG_SIZE * EDI)
 #define OFFSET(x) ((unsigned int) x & (sizeof (long) - 1))
-
-int
-roach_write_mem (roach_context_t *ctx, const char const *data,
-                 const char const *addr, size_t len)
-{
-  size_t i;
-  if (OFFSET (addr))
-    {
-      long tmp;
-      tmp = ptrace (PTRACE_PEEKDATA, ctx->pid, OFFSET (addr), NULL);
-
-      memcpy (&tmp + OFFSET (addr), data, sizeof (long) - OFFSET (addr));
-
-      ptrace (PTRACE_POKEDATA, ctx->pid, OFFSET (addr), tmp);
-
-      len -= sizeof (long) - OFFSET (addr);
-      data += sizeof (long) - OFFSET (addr);
-      addr += sizeof (long) - OFFSET (addr);
-    }
-
-  for (i = 0; i < len / sizeof (long); i++)
-    {
-      ptrace (PTRACE_POKEDATA, ctx->pid, addr, *((long *) data++));
-      len -= sizeof (long);
-      addr += sizeof (long);
-    }
-
-  if (len)
-    {
-      long tmp;
-      tmp = ptrace (PTRACE_PEEKDATA, ctx->pid, addr, NULL);
-      memcpy (&tmp, data, len);
-      ptrace (PTRACE_POKEDATA, ctx->pid, sizeof (long), tmp);
-    }
-
-  return 0;
-}
-
-int
-roach_read_mem (roach_context_t *ctx, char *data,
-                const char const *addr, size_t len)
-{
-  size_t i;
-  if (OFFSET (addr))
-    {
-      long tmp;
-      tmp = ptrace (PTRACE_PEEKDATA, ctx->pid, OFFSET (addr), NULL);
-
-      memcpy (data, &tmp + OFFSET (addr), sizeof (long) - OFFSET (addr));
-
-      len -= sizeof (long) - OFFSET (addr);
-      data += sizeof (long) - OFFSET (addr);
-      addr += sizeof (long) - OFFSET (addr);
-    }
-
-  for (i = 0; i < len / sizeof (long); i++)
-    {
-      *((long *) data++) = ptrace (PTRACE_PEEKDATA, ctx->pid,
-                                   addr, NULL);
-      len -= sizeof (long);
-      addr += sizeof (long);
-    }
-
-  if (len)
-    {
-      long tmp;
-      tmp = ptrace (PTRACE_PEEKDATA, ctx->pid, addr, NULL);
-      memcpy (data, (void *) tmp, len);
-    }
-
-  return 0;
-}
 
 #include "linux_generic.c"

@@ -18,6 +18,183 @@
    along with the program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <sys/ptrace.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <errno.h>
+#include <string.h>
+
+/* Note that the functions in this file require for the following
+   constants to be defined somewhere else:
+   
+   SC_RET_ADDR: Address of the register containing the syscall return
+   value in the child process USER area.
+
+   SC_ARG[1-5]_ADDR: Addresses of the registers containing the
+   syscall arguments in the child process USER area.
+
+   OFFSET(x): Macro returning the address of a given word in the child
+   process memory.  */
+
+int
+roach_get_sc (roach_context_t *ctx)
+{
+  if (! ctx->entering_sc)
+    return ctx->last_syscall;
+
+  return ptrace (PTRACE_PEEKUSER, ctx->pid, SC_REG_ADDR, syscall);
+}
+
+int
+roach_set_sc (roach_context_t *ctx, int syscall)
+{
+  return ptrace (PTRACE_POKEUSER, ctx->pid, SC_REG_ADDR, syscall);
+}
+
+int
+roach_set_sc_ret (roach_context_t *ctx, int retval)
+{
+  return ptrace (PTRACE_POKEUSER, ctx->pid, SC_RET_ADDR, retval);
+}
+
+int
+roach_set_sc_arg (roach_context_t *ctx, int arg, void *data)
+{
+  int reg_address = 0;
+  switch (arg)
+    {
+    case 1:
+      reg_address = SC_ARG1_ADDR;
+      break;
+
+    case 2:
+      reg_address = SC_ARG2_ADDR;
+      break;
+
+    case 3:
+      reg_address = SC_ARG3_ADDR;
+      break;
+
+    case 4:
+      reg_address = SC_ARG4_ADDR;
+      break;
+
+    case 5:
+      reg_address = SC_ARG5_ADDR;
+      break;
+
+    default:
+      return -1;
+    }
+
+  return ptrace (PTRACE_POKEUSER, ctx->pid, reg_address, data);
+}
+
+int
+roach_get_sc_arg (roach_context_t *ctx, int arg)
+{
+  int reg_address = 0;
+  switch (arg)
+    {
+    case 1:
+      reg_address = SC_ARG1_ADDR;
+      break;
+
+    case 2:
+      reg_address = SC_ARG2_ADDR;
+      break;
+
+    case 3:
+      reg_address = SC_ARG3_ADDR;
+      break;
+
+    case 4:
+      reg_address = SC_ARG4_ADDR;
+      break;
+
+    case 5:
+      reg_address = SC_ARG5_ADDR;
+      break;
+
+    default:
+      return -1;
+    }
+
+  return ptrace (PTRACE_PEEKUSER, ctx->pid, reg_address, NULL);
+}
+
+int
+roach_write_mem (roach_context_t *ctx, const char const *data,
+                 const char const *addr, size_t len)
+{
+  size_t i;
+  if (OFFSET (addr))
+    {
+      long tmp;
+      tmp = ptrace (PTRACE_PEEKDATA, ctx->pid, OFFSET (addr), NULL);
+
+      memcpy (&tmp + OFFSET (addr), data, sizeof (long) - OFFSET (addr));
+
+      ptrace (PTRACE_POKEDATA, ctx->pid, OFFSET (addr), tmp);
+
+      len -= sizeof (long) - OFFSET (addr);
+      data += sizeof (long) - OFFSET (addr);
+      addr += sizeof (long) - OFFSET (addr);
+    }
+
+  for (i = 0; i < len / sizeof (long); i++)
+    {
+      ptrace (PTRACE_POKEDATA, ctx->pid, addr, *((long *) data++));
+      len -= sizeof (long);
+      addr += sizeof (long);
+    }
+
+  if (len)
+    {
+      long tmp;
+      tmp = ptrace (PTRACE_PEEKDATA, ctx->pid, addr, NULL);
+      memcpy (&tmp, data, len);
+      ptrace (PTRACE_POKEDATA, ctx->pid, sizeof (long), tmp);
+    }
+
+  return 0;
+}
+
+int
+roach_read_mem (roach_context_t *ctx, char *data,
+                const char const *addr, size_t len)
+{
+  size_t i;
+  if (OFFSET (addr))
+    {
+      long tmp;
+      tmp = ptrace (PTRACE_PEEKDATA, ctx->pid, OFFSET (addr), NULL);
+
+      memcpy (data, &tmp + OFFSET (addr), sizeof (long) - OFFSET (addr));
+
+      len -= sizeof (long) - OFFSET (addr);
+      data += sizeof (long) - OFFSET (addr);
+      addr += sizeof (long) - OFFSET (addr);
+    }
+
+  for (i = 0; i < len / sizeof (long); i++)
+    {
+      *((long *) data++) = ptrace (PTRACE_PEEKDATA, ctx->pid,
+                                   addr, NULL);
+      len -= sizeof (long);
+      addr += sizeof (long);
+    }
+
+  if (len)
+    {
+      long tmp;
+      tmp = ptrace (PTRACE_PEEKDATA, ctx->pid, addr, NULL);
+      memcpy (data, (void *) tmp, len);
+    }
+
+  return 0;
+}
+
 #ifndef ARCH_HAS_SYSCALL_INHIBIT
 
 int

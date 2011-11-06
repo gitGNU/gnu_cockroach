@@ -33,6 +33,18 @@ AC_PROG_CC
 gl_EARLY
 gl_INIT
 
+# Detect the architecture of the host machine and determine whether it
+# is a valid one.
+AC_CANONICAL_HOST
+case "${host}" in
+     i[3456]86*) ROACH_ARCH=x86_32;;
+     x86_64*) ROACH_ARCH=x86_64;;              
+     *) AC_ERROR([Unsupported architecture ${host}])
+esac
+AC_SUBST([ROACH_ARCH])
+AM_CONDITIONAL([ROACH_ARCH_X86_32],[test "$ROACH_ARCH" = "x86_32"])
+AM_CONDITIONAL([ROACH_ARCH_X86_64],[test "$ROACH_ARCH" = "x86_64"])
+
 # GNU help2man creates man pages from --help output; in many cases, this
 # is sufficient, and obviates the need to maintain man pages separately.
 # However, this means invoking executables, which we generally cannot do

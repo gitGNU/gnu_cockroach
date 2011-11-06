@@ -1,5 +1,30 @@
 2011-11-06  Jose E. Marchesi  <jemarch@gnu.org>
 
+	Support for multiple hardware architectures, and x86_64 added.
+	* src/Makefile.am (EXTRA_libroach_a_SOURCES): Defined to allow
+	conditional compilation depending on the host architecture.
+
+	* configure.ac: Detect host architecture and set and subst
+	ROACH_ARCH.  Emit an error if the architecture is not supported by
+	libroach.
+
+	* src/arch/linux_generic.c: New comment describing the macros
+	required for the generic functions to work.
+
+	* src/arch/linux_i386.c: Reduced to define the constants
+	SC_REG_SIZE, SC_REG_ADDR, SC_RET_ADDR, SC_ARG[1-5]ADDR and OFFSET.
+
+	* src/arch/linux_generic.c (roach_get_sc): Moved from linux_i386.c
+	and made generic.
+	(roach_set_sc): Likewise.
+	(roach_set_sc_ret): Likewise.
+	(roach_set_sc_arg): Likewise.
+	(roach_get_sc_arg): Likewise.
+	(roach_write_mem): Likewise.
+	(roach_read_mem): Likewise.
+
+2011-11-06  Jose E. Marchesi  <jemarch@gnu.org>
+
 	Build libroach and the cockroach utility.
 	* src/arch/linux_i386.c: Include roach.h.
 
