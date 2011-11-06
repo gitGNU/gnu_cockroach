@@ -36,6 +36,8 @@
    OFFSET(x): Macro returning the address of a given word in the child
    process memory.  */
 
+#define min(a,b) ((a) < (b) ? (a) : (b))
+
 int
 roach_get_sc (roach_context_t *ctx)
 {
@@ -131,15 +133,15 @@ roach_write_mem (roach_context_t *ctx, const char const *data,
   if (OFFSET (addr))
     {
       long tmp;
-      tmp = ptrace (PTRACE_PEEKDATA, ctx->pid, OFFSET (addr), NULL);
+      long to_read = min (len, sizeof (long) - OFFSET (addr));
+      tmp = ptrace (PTRACE_PEEKDATA, ctx->pid, addr, NULL);
 
-      memcpy (&tmp + OFFSET (addr), data, sizeof (long) - OFFSET (addr));
+      memcpy (&tmp, data, to_read);
 
-      ptrace (PTRACE_POKEDATA, ctx->pid, OFFSET (addr), tmp);
-
-      len -= sizeof (long) - OFFSET (addr);
-      data += sizeof (long) - OFFSET (addr);
-      addr += sizeof (long) - OFFSET (addr);
+      ptrace (PTRACE_POKEDATA, ctx->pid, addr, tmp);
+      len -= to_read;
+      data += to_read;
+      addr += to_read;
     }
 
   for (i = 0; i < len / sizeof (long); i++)
@@ -154,7 +156,7 @@ roach_write_mem (roach_context_t *ctx, const char const *data,
       long tmp;
       tmp = ptrace (PTRACE_PEEKDATA, ctx->pid, addr, NULL);
       memcpy (&tmp, data, len);
-      ptrace (PTRACE_POKEDATA, ctx->pid, sizeof (long), tmp);
+      ptrace (PTRACE_POKEDATA, ctx->pid, addr, tmp);
     }
 
   return 0;
@@ -168,13 +170,14 @@ roach_read_mem (roach_context_t *ctx, char *data,
   if (OFFSET (addr))
     {
       long tmp;
-      tmp = ptrace (PTRACE_PEEKDATA, ctx->pid, OFFSET (addr), NULL);
+      long to_read = min (len, sizeof (long) - OFFSET (addr));
+      tmp = ptrace (PTRACE_PEEKDATA, ctx->pid, addr, NULL);
 
-      memcpy (data, &tmp + OFFSET (addr), sizeof (long) - OFFSET (addr));
+      memcpy (data, &tmp, to_read);
 
-      len -= sizeof (long) - OFFSET (addr);
-      data += sizeof (long) - OFFSET (addr);
-      addr += sizeof (long) - OFFSET (addr);
+      len -= to_read;
+      data += to_read;
+      addr += to_read;
     }
 
   for (i = 0; i < len / sizeof (long); i++)
@@ -189,7 +192,7 @@ roach_read_mem (roach_context_t *ctx, char *data,
     {
       long tmp;
       tmp = ptrace (PTRACE_PEEKDATA, ctx->pid, addr, NULL);
-      memcpy (data, (void *) tmp, len);
+      memcpy (data, &tmp, len);
     }
 
   return 0;

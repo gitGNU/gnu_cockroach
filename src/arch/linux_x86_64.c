@@ -51,7 +51,7 @@
 #   define SC_ARG3_ADDR (SC_REG_SIZE * EDX)
 #   define SC_ARG4_ADDR (SC_REG_SIZE * ESI)
 #   define SC_ARG5_ADDR (SC_REG_SIZE * EDI)
-#   define OFFSET(x) ((unsigned int) x & (sizeof (long) - 1))
+#   define OFFSET(x) ((long) x & (sizeof (int) - 1))
 #endif
 
 #include "linux_generic.c"
