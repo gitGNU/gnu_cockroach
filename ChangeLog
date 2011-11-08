@@ -1,5 +1,8 @@
 2011-11-08  Giuseppe Scrivano  <giuseppe@southpole.se>
 
+	* src/roach.c (roach_reg_syscall): Pass correctly the DATA argument to
+	the roach_make_hook function.
+
 	* src/arch/linux_generic.c (OFFSET) [! OFFSET]: Define macro.
 	* src/arch/linux_i386.c (OFFSET): Remove definition.
 	* src/arch/linux_x86_64.c (OFFSET): Likewise.

@@ -183,7 +183,7 @@ roach_reg_syscall (roach_context_t *ctx, int syscall, hook_func_t hook_func,
   roach_hook_t *hook;
   int syscalls[] = {syscall, 0};
 
-  hook = roach_make_hook (HOOK_BOTH, syscalls, hook_func, -1);
+  hook = roach_make_hook (HOOK_BOTH, syscalls, hook_func, data);
   if (hook == NULL)
     return -1;
 
