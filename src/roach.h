@@ -83,6 +83,7 @@ bool roach_entering_sc_p (roach_context_t *ctx);
 /* Architecture specific functions.  */
 long roach_get_sc (roach_context_t *ctx);
 long roach_set_sc (roach_context_t *ctx, int syscall);
+long roach_get_sc_ret (roach_context_t *ctx);
 long roach_set_sc_ret (roach_context_t *ctx, int retval);
 long roach_get_sc_arg (roach_context_t *ctx, int arg);
 long roach_set_sc_arg (roach_context_t *ctx, int arg, void *data);

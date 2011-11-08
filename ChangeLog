@@ -1,5 +1,8 @@
 2011-11-08  Giuseppe Scrivano  <giuseppe@southpole.se>
 
+	* src/roach.h: Declare roach_get_sc_ret.
+	* src/roach.c (roach_get_sc_ret): New function.
+
 	* src/roach.h: Rename roach_spawn_process to roach_rot_process.  Define
 	new function roach_rot_function.
 	* src/roach.c (roach_spawn_process): Rename to...

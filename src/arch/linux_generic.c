@@ -60,6 +60,12 @@ roach_set_sc (roach_context_t *ctx, int syscall)
 }
 
 long
+roach_get_sc_ret (roach_context_t *ctx)
+{
+  return ptrace (PTRACE_PEEKUSER, ctx->pid, SC_RET_ADDR, 0);
+}
+
+long
 roach_set_sc_ret (roach_context_t *ctx, int retval)
 {
   return ptrace (PTRACE_POKEUSER, ctx->pid, SC_RET_ADDR, retval);
