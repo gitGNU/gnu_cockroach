@@ -33,8 +33,14 @@
    SC_ARG[1-5]_ADDR: Addresses of the registers containing the
    syscall arguments in the child process USER area.
 
+   These constants get defined if they weren't previously defined:
+
    OFFSET(x): Macro returning the address of a given word in the child
    process memory.  */
+
+#ifndef OFFSET
+# define OFFSET(x) ((long) x & (sizeof (long) - 1))
+#endif
 
 #define min(a,b) ((a) < (b) ? (a) : (b))
 
