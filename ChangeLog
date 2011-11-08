@@ -1,5 +1,13 @@
 2011-11-08  Giuseppe Scrivano  <giuseppe@southpole.se>
 
+	* src/roach.h: Rename roach_spawn_process to roach_rot_process.  Define
+	new function roach_rot_function.
+	* src/roach.c (roach_spawn_process): Rename to...
+	(roach_rot_process): ...this.
+	(roach_rot_function): New function.
+
+	* src/cockroach.c (main): Fix roach_rot_process call.
+
 	* src/roach.c (roach_reg_syscall): Pass correctly the DATA argument to
 	the roach_make_hook function.
 

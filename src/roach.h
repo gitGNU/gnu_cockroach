@@ -71,6 +71,9 @@ void roach_free_context (roach_context_t *ctx);
 void roach_ctx_add_hook (roach_context_t *ctx, roach_hook_t *hook);
 void roach_ctx_rm_hook (roach_context_t *ctx, roach_hook_t *hook);
 
+int roach_rot_function (roach_context_t *ctx, void (*function) (void *),
+                        void *data);
+
 pid_t roach_spawn_process (roach_context_t *ctx, char const *exec,
                          char *const *argv);
 int roach_wait (roach_context_t *ctx, int *status);

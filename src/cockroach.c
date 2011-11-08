@@ -175,7 +175,7 @@ main (int argc, char **argv)
   if (roach_reg_syscall (ctx, 4, roach_syscall_inhibit, (void *) -1) < 0)
     exit (EXIT_FAILURE);
 
-  pid = roach_spawn_process (ctx, child_program_name, argv + optind);
+  pid = roach_rot_process (ctx, child_program_name, argv + optind);
   if (pid < 0)
     error (EXIT_FAILURE, errno, "spawn process");
 

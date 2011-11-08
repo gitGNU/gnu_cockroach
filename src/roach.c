@@ -122,7 +122,23 @@ roach_ctx_rm_hook (roach_context_t *ctx, roach_hook_t *hook)
 }
 
 int
-roach_spawn_process (roach_context_t *ctx, char const *exec, char *const *argv)
+roach_rot_function (roach_context_t *ctx, void (*function) (void *), void *data)
+{
+  pid_t pid = fork ();
+  if (pid == 0)
+    {
+      if (ptrace (PTRACE_TRACEME, 0, NULL, NULL) < 0)
+        exit (EXIT_FAILURE);
+      function (data);
+      exit (EXIT_FAILURE);
+    }
+  wait ();
+  ctx->pid = pid;
+  return pid;
+}
+
+int
+roach_rot_process (roach_context_t *ctx, char const *exec, char *const *argv)
 {
   pid_t pid = fork ();
   if (pid == 0)
