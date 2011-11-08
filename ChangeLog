@@ -1,3 +1,16 @@
+2011-11-08  Giuseppe Scrivano  <giuseppe@southpole.se>
+
+	* src/roach.h (roach_get_sc): Change return type to long.
+	(roach_set_sc): Likewise.
+	(roach_set_sc_ret): Likewise.
+	(roach_get_sc_arg): Likewise.
+	(roach_set_sc_arg): Likewise.
+	* src/arch/linux_generic.c (roach_get_sc): Change return type to long.
+	(roach_set_sc): Likewise.
+	(roach_set_sc_ret): Likewise.
+	(roach_get_sc_arg): Likewise.
+	(roach_set_sc_arg): Likewise.
+
 2011-11-06  Giuseppe Scrivano  <gscrivano@gnu.org>
 
 	* src/Makefile.am (EXTRA_DIST): Add arch/linux_i386.c and

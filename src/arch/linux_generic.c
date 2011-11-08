@@ -38,7 +38,7 @@
 
 #define min(a,b) ((a) < (b) ? (a) : (b))
 
-int
+long
 roach_get_sc (roach_context_t *ctx)
 {
   if (! ctx->entering_sc)
@@ -47,19 +47,19 @@ roach_get_sc (roach_context_t *ctx)
   return ptrace (PTRACE_PEEKUSER, ctx->pid, SC_REG_ADDR, syscall);
 }
 
-int
+long
 roach_set_sc (roach_context_t *ctx, int syscall)
 {
   return ptrace (PTRACE_POKEUSER, ctx->pid, SC_REG_ADDR, syscall);
 }
 
-int
+long
 roach_set_sc_ret (roach_context_t *ctx, int retval)
 {
   return ptrace (PTRACE_POKEUSER, ctx->pid, SC_RET_ADDR, retval);
 }
 
-int
+long
 roach_set_sc_arg (roach_context_t *ctx, int arg, void *data)
 {
   int reg_address = 0;
@@ -92,7 +92,7 @@ roach_set_sc_arg (roach_context_t *ctx, int arg, void *data)
   return ptrace (PTRACE_POKEUSER, ctx->pid, reg_address, data);
 }
 
-int
+long
 roach_get_sc_arg (roach_context_t *ctx, int arg)
 {
   int reg_address = 0;
