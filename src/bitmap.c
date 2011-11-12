@@ -26,7 +26,7 @@
 static size_t
 needed_size (size_t size)
 {
-  sizeof (unsigned int) * ((size + BUCKET_SIZE) / BUCKET_SIZE - 1);
+  return sizeof (unsigned int) * ((size + BUCKET_SIZE) / BUCKET_SIZE - 1);
 }
 
 bitmap_t *
@@ -119,4 +119,6 @@ roach_bitmap_flip_all (bitmap_t *bm)
 
   /* Last one may not be completely allocated, do not set unused bits.  */
   bm->data[i] = ~bm->data[i] & ((1 << (bm->n_elements % BUCKET_SIZE)) - 1);
+
+  return 0;
 }

@@ -1,5 +1,16 @@
 2011-11-12  Jose E. Marchesi  <jemarch@gnu.org>
 
+	warnings fixes.
+	* src/roach.c: Include unistd.h.
+	Include sys/wait.h.
+	(roach_rot_function): Pass NULL to wait.
+	(roach_rot_process): Likewise.
+
+	* src/bitmap.c (needed_size): Do something useful.
+	(roach_bitmap_flip_all): Return something.
+
+2011-11-12  Jose E. Marchesi  <jemarch@gnu.org>
+
 	* src/arch/linux_generic.c (roach_syscall_inhibit): Cast to long
 	to avoid truncation in 64bit platforms.
 

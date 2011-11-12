@@ -18,9 +18,14 @@
    along with the program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "roach.h"
+#include <config.h>
+
+#include <unistd.h>
+#include <sys/wait.h>
 #include <stdlib.h>
 #include <sys/ptrace.h>
+
+#include "roach.h"
 
 roach_hook_t *
 roach_make_hook (enum HOOK_TYPE type, int *syscalls, hook_func_t hook,
@@ -132,7 +137,7 @@ roach_rot_function (roach_context_t *ctx, void (*function) (void *), void *data)
       function (data);
       exit (EXIT_FAILURE);
     }
-  wait ();
+  wait (NULL);
   ctx->pid = pid;
   return pid;
 }
@@ -148,7 +153,7 @@ roach_rot_process (roach_context_t *ctx, char const *exec, char *const *argv)
       execv (exec, argv);
       exit (EXIT_FAILURE);
     }
-  wait ();
+  wait (NULL);
   ctx->pid = pid;
   return pid;
 }
@@ -160,7 +165,7 @@ roach_wait (roach_context_t *ctx, int *status)
   roach_hook_t *hook;
 
   ptrace (PTRACE_SYSCALL, ctx->pid, NULL, NULL);
-  ret = waitpid (ctx->pid, status, NULL);
+  ret = waitpid (ctx->pid, status, 0);
 
   if (ret > 0)
     ctx->entering_sc = !ctx->entering_sc;
