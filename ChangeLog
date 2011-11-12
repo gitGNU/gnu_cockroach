@@ -1,3 +1,8 @@
+2011-11-12  Jose E. Marchesi  <jemarch@gnu.org>
+
+	* src/arch/linux_generic.c (roach_syscall_inhibit): Cast to long
+	to avoid truncation in 64bit platforms.
+
 2011-11-08  Giuseppe Scrivano  <giuseppe@southpole.se>
 
 	* src/roach.h: Declare roach_get_sc_ret.

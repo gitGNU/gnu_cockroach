@@ -220,7 +220,7 @@ roach_syscall_inhibit (roach_context_t *ctx, bool enter, void *data)
    if (enter)
     roach_set_sc (ctx, 20);
   else
-    roach_set_sc_ret (ctx, (int) data);
+    roach_set_sc_ret (ctx, (long) data);
 
    return 0;
 }
