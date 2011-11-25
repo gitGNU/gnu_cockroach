@@ -1,3 +1,9 @@
+2011-11-25  Giuseppe Scrivano  <gscrivano@gnu.org>
+
+	do not use syscall magic numbers.
+	* src/plugins/fail_mem/fail_mem.c: Include <syscall.h>
+	(plugin_add): Use __NR_brk and __NR_mmap2 instead of magic numbers.
+
 2011-11-25  Giuseppe Scrivano  <giuseppe@southpole.se>
 
 	fail_mem: new plugin.

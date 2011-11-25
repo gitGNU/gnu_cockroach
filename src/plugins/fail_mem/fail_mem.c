@@ -19,8 +19,9 @@
 */
 
 #include <roach.h>
+#include <syscall.h>
 
-static struct
+struct
 fail_mem_s
 {
   int counter;
@@ -86,10 +87,10 @@ plugin_add (roach_context_t *ctx, const char *options)
   data->counter = 0;
   data->fail_at = atoi (options);
 
-  if (roach_reg_syscall (ctx, 45, fail_mem, data) < 0)
+  if (roach_reg_syscall (ctx, __NR_brk, fail_mem, data) < 0)
     exit (EXIT_FAILURE);
 
-  if (roach_reg_syscall (ctx, 192, fail_mem, data) < 0)
+  if (roach_reg_syscall (ctx, __NR_mmap2, fail_mem, data) < 0)
     exit (EXIT_FAILURE);
 
   return 0;
