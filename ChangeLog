@@ -1,5 +1,8 @@
 2011-11-25  Giuseppe Scrivano  <giuseppe@southpole.se>
 
+	fix test suite build.
+	* tests/Makefile.am (LDADD): Use libroach.la instead of libroach.a
+
 	add plugins support.
 	* src//plugins.h: New file.
 	* src/plugins.c: Likewise.
