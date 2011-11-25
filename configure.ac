@@ -15,10 +15,10 @@ AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([dist-xz])
 AM_CONFIG_HEADER(src/config.h)
 
-AC_PROG_RANLIB
-
 # Minimum Autoconf version required.
 AC_PREREQ(2.60)
+
+AC_CONFIG_MACRO_DIR([m4])
 
 # Where to generate output; srcdir location.
 AC_CONFIG_HEADERS([config.h:config.in])dnl Keep filename to 8.3 for MS-DOS.
@@ -46,6 +46,9 @@ AC_SUBST([ROACH_ARCH])
 AM_CONDITIONAL([ROACH_ARCH_X86_32],[test "$ROACH_ARCH" = "x86_32"])
 AM_CONDITIONAL([ROACH_ARCH_X86_64],[test "$ROACH_ARCH" = "x86_64"])
 
+AC_PROG_LIBTOOL
+LT_INIT([dlopen])
+
 # GNU help2man creates man pages from --help output; in many cases, this
 # is sufficient, and obviates the need to maintain man pages separately.
 # However, this means invoking executables, which we generally cannot do
@@ -66,5 +69,7 @@ AC_CONFIG_FILES([Makefile \
            lib/Makefile \
            po/Makefile.in \
            src/Makefile \
+           src/plugins/Makefile \
+           src/plugins/inhibit/Makefile \
            tests/Makefile])
 AC_OUTPUT

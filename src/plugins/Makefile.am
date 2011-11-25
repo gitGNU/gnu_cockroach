@@ -1,6 +1,5 @@
-# Makefile for the top-level directory of GNU cockroach.
-# 
-# Copyright 2011 Free Software Foundation, Inc.
+# Copyright 2011 Giuseppe Scrivano.
+# Copyright 2011 Jose E. Marchesi.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Subdirectories to descend into.
-SUBDIRS = doc lib po src tests
+SUBDIRS=inhibit
+AM_CFLAGS=-I..
 
-ACLOCAL_AMFLAGS = -I m4
+include_HEADERS = plugin.h

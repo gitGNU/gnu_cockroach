@@ -1,3 +1,20 @@
+2011-11-25  Giuseppe Scrivano  <giuseppe@southpole.se>
+
+	add plugins support.
+	* src//plugins.h: New file.
+	* src/plugins.c: Likewise.
+	* src/plugins/plugin.h: Likewise.
+	* src/plugins/Makefile.am: Likewise.
+	* src/plugins/inhibit/Makefile.am: Likewise.
+	* src/plugins/inhibit/inhibit.c: Likewise.
+	* Makefile.am: Generate the library using libtool.
+	(SUBDIRS): Add plugins.
+	* configure.ac: Look for libtool.  Update makefiles list.
+	* cockroach.c: Include "plugins.h".
+	(long_options): Add PLUGIN_ARG and PLUGIN_ADD_ARG.
+	(main): Handle PLUGIN_ARG and PLUGIN_ADD_ARG.  Remove inhibit handler
+	used by default.
+
 2011-11-12  Jose E. Marchesi  <jemarch@gnu.org>
 
 	warnings fixes.

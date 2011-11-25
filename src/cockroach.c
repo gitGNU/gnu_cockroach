@@ -31,18 +31,23 @@
 #define _(str) gettext (str)
 
 #include "roach.h"
+#include "plugins.h"
 
 extern char *program_name;
 
 enum
 {
   HELP_ARG,
+  PLUGIN_ARG,
+  PLUGIN_ADD_ARG,
   VERSION_ARG
 };
 
 static const struct option long_options[] =
 {
   {"help", no_argument, NULL, HELP_ARG},
+  {"plugin", required_argument, NULL, PLUGIN_ARG},
+  {"plugin-add", required_argument, NULL, PLUGIN_ADD_ARG},
   {"version", no_argument, NULL, VERSION_ARG},
   {NULL, 0, NULL, 0}
 };
@@ -64,8 +69,10 @@ Alter the running environment of your program.\n"), stdout);
   /* TRANSLATORS: --help output, cockroach arguments.
      no-wrap */
   fputs (_("\
-      --help                          print a help message and exit.\n\
-      --version                       show version and exit.\n"),
+      --help                           print a help message and exit.\n\
+      --plugin=PLUGIN                  load the plugin file\n\
+      --plugin-add=PLUGIN_NAME:OPTIONS add a plugin instance\n\
+      --version                        show version and exit.\n"),
          stdout);
 
   puts ("");
@@ -102,7 +109,7 @@ cockroach_print_version (void)
 
   /* It is important to separate the year from the rest of the message,
      as done here, to avoid having to retranslate the message when a new
-     year comes around.  */  
+     year comes around.  */
   printf (_("\
 Copyright (C) %s Jose E. Marchesi.\n\
 Copyright (C) %s Giuseppe Scrivano.\n\
@@ -149,6 +156,26 @@ main (int argc, char **argv)
             exit (EXIT_SUCCESS);
             break;
           }
+        case PLUGIN_ARG:
+          {
+            plugins_load (ctx, optarg);
+            break;
+          }
+        case PLUGIN_ADD_ARG:
+          {
+            char *opt;
+            char *data = strdup (optarg);
+            if (data == NULL)
+              exit (EXIT_FAILURE);
+            opt = strchr (data, ':');
+            if (opt == NULL)
+              exit (EXIT_FAILURE);
+            *opt = '\0';
+
+            plugins_load_instance (ctx, data, opt + 1);
+            free (data);
+            break;
+          }
         case VERSION_ARG:
           {
             cockroach_print_version ();
@@ -171,9 +198,6 @@ main (int argc, char **argv)
     }
 
   child_program_name = argv[optind];
-
-  if (roach_reg_syscall (ctx, 4, roach_syscall_inhibit, (void *) -1) < 0)
-    exit (EXIT_FAILURE);
 
   pid = roach_rot_process (ctx, child_program_name, argv + optind);
   if (pid < 0)
