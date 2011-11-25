@@ -70,6 +70,7 @@ AC_CONFIG_FILES([Makefile \
            po/Makefile.in \
            src/Makefile \
            src/plugins/Makefile \
+           src/plugins/fail_mem/Makefile \
            src/plugins/inhibit/Makefile \
            tests/Makefile])
 AC_OUTPUT

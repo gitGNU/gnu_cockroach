@@ -14,7 +14,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-SUBDIRS = fail_mem inhibit
-AM_CFLAGS = -I..
+lib_LTLIBRARIES = libfail_mem.la
 
-include_HEADERS = plugin.h
+AM_CFLAGS=-I../..
+
+libdir=@libdir@/roach/plugins/
+
+libfail_mem_la_SOURCES = fail_mem.c
+libfail_mem_la_LDFLAGS = -shared

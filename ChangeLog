@@ -1,5 +1,11 @@
 2011-11-25  Giuseppe Scrivano  <giuseppe@southpole.se>
 
+	fail_mem: new plugin.
+	* configure.ac: Generate the makefile for the fail_mem plugin.
+	* src/plugins/Makefile.am (SUBDIRS): Add fail_mem.
+	* src/plugins/fail_mem/fail_mem.c (libfail_mem_la_LDFLAGS): New file.
+	* src/plugins/fail_mem/Makefile.am (libfail_mem_la_LDFLAGS): New file.
+
 	fix syscall return value register.
 	* src/arch/linux_i386.c (SC_RET_ADDR): Fix syscall return register.
 	* src/arch/linux_x86_64.c (SC_RET_ADDR): Likewise.
