@@ -150,7 +150,7 @@ roach_rot_process (roach_context_t *ctx, char const *exec, char *const *argv)
     {
       if (ptrace (PTRACE_TRACEME, 0, NULL, NULL) < 0)
         exit (EXIT_FAILURE);
-      execv (exec, argv);
+      execvp (exec, argv);
       exit (EXIT_FAILURE);
     }
   wait (NULL);
