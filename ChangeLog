@@ -1,5 +1,8 @@
 2014-06-28  Giuseppe Scrivano  <gscrivan@redhat.com>
 
+	* configure.ac: Use external gettext.
+	* bootstrap.conf (gnulib_modules): Remove gettext module.
+
 	* bootstrap: Update from gnulib.
 
 2011-12-07  Giuseppe Scrivano  <giuseppe@southpole.se>

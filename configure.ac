@@ -61,8 +61,8 @@ else
 fi
 
 # i18n support from GNU gettext.
-AM_GNU_GETTEXT_VERSION([0.18.1])
-AM_GNU_GETTEXT([external])
+AM_GNU_GETTEXT([external],[need-ngettext])
+AM_GNU_GETTEXT_VERSION([0.17])
 
 AC_CONFIG_FILES([Makefile \
            doc/Makefile \
