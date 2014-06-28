@@ -1,5 +1,7 @@
 2014-06-28  Giuseppe Scrivano  <gscrivan@redhat.com>
 
+	* configure.ac: Remove spurious AC_CONFIG_HEADERS.
+
 	* configure.ac: Use external gettext.
 	* bootstrap.conf (gnulib_modules): Remove gettext module.
 
