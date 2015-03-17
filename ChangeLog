@@ -1,3 +1,12 @@
+2015-03-17  Giuseppe Scrivano  <gscrivan@redhat.com>
+
+	* src/Makefile.am (cockroach_LDADD): Use libcockroach.la not
+	libcockroach.a.
+	* tests/Makefile.am (cockroach_LDADD): Likewise.
+	* src/roach.h: Include <config.h>.
+	* src/plugins/fail_mem/fail_mem.c (plugin_add): Check if __NR_mmap2
+	exists before using it.
+
 2014-06-28  Giuseppe Scrivano  <gscrivan@redhat.com>
 
 	* configure.ac: Remove spurious AC_CONFIG_HEADERS.

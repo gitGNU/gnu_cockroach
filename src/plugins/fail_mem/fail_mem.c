@@ -90,8 +90,10 @@ plugin_add (roach_context_t *ctx, const char *options)
   if (roach_reg_syscall (ctx, __NR_brk, fail_mem, data) < 0)
     exit (EXIT_FAILURE);
 
+#ifdef __NR_mmap2
   if (roach_reg_syscall (ctx, __NR_mmap2, fail_mem, data) < 0)
     exit (EXIT_FAILURE);
+#endif
 
   return 0;
 }

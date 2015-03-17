@@ -21,6 +21,7 @@
 #ifndef ROACH_H
 # define ROACH_H
 
+# include <config.h>
 # include <stddef.h>
 # include <sys/types.h>
 # include <stdbool.h>

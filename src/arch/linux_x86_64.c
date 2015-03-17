@@ -18,10 +18,9 @@
    along with the program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "../roach.h"
 #include <sys/reg.h>
 #include <bits/wordsize.h>
-
-#include "../roach.h"
 
 /* The following constants describe the layout of the USER section of
    the child process bein peek/poked and are used in the
