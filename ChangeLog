@@ -1,5 +1,8 @@
 2015-03-21  Giuseppe Scrivano  <gscrivan@redhat.com>
 
+	* src/plugins/inhibit/inhibit.c (plugin_add): Permit to specify
+	return code.
+
 	* README: Improve description.
 
 2015-03-17  Giuseppe Scrivano  <gscrivan@redhat.com>

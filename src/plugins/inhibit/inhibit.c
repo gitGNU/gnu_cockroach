@@ -19,6 +19,8 @@
 */
 
 #include <roach.h>
+#include <stdlib.h>
+#include <string.h>
 
 const char *
 plugin_get_name ()
@@ -41,10 +43,25 @@ plugin_free (roach_context_t *ctx)
 int
 plugin_add (roach_context_t *ctx, const char *options)
 {
+  char *buffer = strdup (options);
   int syscall = atoi (options);
+  char *ret = strchr (buffer, ',');
+  void *ret_code;
+  if (buffer == NULL)
+    return -1;
+  if (ret)
+    {
+      *ret = '\0';
+      ret++;
+    }
+  if (ret)
+    ret_code = (void *) atol (ret);
+  else
+    ret_code =(void *) -1;
 
-  if (roach_reg_syscall (ctx, syscall, roach_syscall_inhibit, (void *) -1) < 0)
+  if (roach_reg_syscall (ctx, syscall, roach_syscall_inhibit, ret_code) < 0)
     exit (EXIT_FAILURE);
 
+  free (buffer);
   return 0;
 }
