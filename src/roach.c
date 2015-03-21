@@ -24,6 +24,7 @@
 #include <sys/wait.h>
 #include <stdlib.h>
 #include <sys/ptrace.h>
+#include <errno.h>
 
 #include "roach.h"
 
@@ -130,14 +131,26 @@ int
 roach_rot_process (roach_context_t *ctx, char const *exec, char *const *argv)
 {
   pid_t pid = fork ();
+  long options = PTRACE_O_TRACEEXIT
+    | PTRACE_O_TRACEFORK
+    | PTRACE_O_TRACEVFORK
+    | PTRACE_O_TRACECLONE;
   if (pid == 0)
     {
       if (ptrace (PTRACE_TRACEME, 0, NULL, NULL) < 0)
         exit (EXIT_FAILURE);
+      raise (SIGSTOP);
       execvp (exec, argv);
       exit (EXIT_FAILURE);
     }
-  wait (NULL);
+  else
+    {
+      wait (NULL);
+      if (ptrace (PTRACE_SETOPTIONS, pid, NULL, options))
+        error (EXIT_FAILURE, errno, "error setting ptrace options %i", ctx->pid);
+      kill (pid, SIGCONT);
+    }
+
   ctx->pid = pid;
   return pid;
 }

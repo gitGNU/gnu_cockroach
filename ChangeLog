@@ -1,5 +1,7 @@
 2015-03-21  Giuseppe Scrivano  <gscrivan@redhat.com>
 
+	* src/roach.c (roach_rot_process): Trace child processes too.
+
 	* src/cockroach.c (main): do not process arguments to the process.
 
 	* src/plugins/inhibit/inhibit.c (plugin_add): Permit to specify
