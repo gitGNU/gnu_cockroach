@@ -1,3 +1,7 @@
+2015-03-21  Giuseppe Scrivano  <gscrivan@redhat.com>
+
+	* README: Improve description.
+
 2015-03-17  Giuseppe Scrivano  <gscrivan@redhat.com>
 
 	* src/Makefile.am (cockroach_LDADD): Use libcockroach.la not

@@ -1,3 +1,5 @@
-GNU cockroach will try to make your program fail by simulating all
-kind of nasty conditions such as full disks, memory shortages,
+GNU cockroach is a framework that allows you to intercept syscalls and
+let them behave in a different manner.
+This can be used for example to make your program fail by simulating
+all kind of nasty conditions such as full disks, memory shortages,
 unreliable sockets, and many more disgusting things.
