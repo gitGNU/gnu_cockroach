@@ -206,13 +206,7 @@ main (int argc, char **argv)
   if (pid < 0)
     error (EXIT_FAILURE, errno, "spawn process");
 
-  for (;;)
-    {
-      int status;
-      roach_wait (ctx, &status);
-      if (WIFEXITED (status))
-        break;
-    }
+  while (roach_wait (ctx));
 
   return 0;
 }

@@ -77,7 +77,7 @@ int roach_rot_function (roach_context_t *ctx, void (*function) (void *),
 
 pid_t roach_spawn_process (roach_context_t *ctx, char const *exec,
                          char *const *argv);
-int roach_wait (roach_context_t *ctx, int *status);
+int roach_wait (roach_context_t *ctx);
 
 bool roach_entering_sc_p (roach_context_t *ctx);
 

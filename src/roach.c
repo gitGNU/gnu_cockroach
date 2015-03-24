@@ -156,13 +156,21 @@ roach_rot_process (roach_context_t *ctx, char const *exec, char *const *argv)
 }
 
 int
-roach_wait (roach_context_t *ctx, int *status)
+roach_wait (roach_context_t *ctx)
 {
-  int ret, syscall;
+  pid_t ret;
+  int syscall;
   roach_hook_t *hook;
-
+  int status = 0;
   ptrace (PTRACE_SYSCALL, ctx->pid, NULL, NULL);
-  ret = waitpid (ctx->pid, status, 0);
+  ret = waitpid (-1, &status, 0);
+
+  if (WIFSTOPPED (status))
+    {
+      if (ptrace (PTRACE_CONT, ret, NULL, NULL) < 0)
+        error (EXIT_FAILURE, errno, "waking up process");
+      return 1;
+    }
 
   if (ret > 0)
     ctx->entering_sc = !ctx->entering_sc;
@@ -185,7 +193,10 @@ roach_wait (roach_context_t *ctx, int *status)
         hook->hook (ctx, ctx->entering_sc, hook->data);
     }
 
-  return ret;
+  if (ret == ctx->pid && WIFEXITED (status))
+    return 0;
+
+  return 1;
 }
 
 bool
