@@ -10,7 +10,7 @@
 This manual is for GNU cockroach (version @value{VERSION},
 @value{UPDATED}).
 
-Copyright @copyright{} 2011 Giuseppe Scrivano, Jose E. Marchesi
+Copyright @copyright{} 2011-2015 Giuseppe Scrivano, Jose E. Marchesi
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
