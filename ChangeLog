@@ -1,5 +1,9 @@
 2015-03-29  Jose E. Marchesi  <jemarch@gnu.org>
 
+	* .gitignore: updated.
+
+2015-03-29  Jose E. Marchesi  <jemarch@gnu.org>
+
 	copyright years updated and program name fixed in notices.
 	* src/bitmap.c: Fix program name in copyright notice, and update
 	year.
