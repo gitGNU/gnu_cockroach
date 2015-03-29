@@ -1,5 +1,11 @@
 2015-03-29  Jose E. Marchesi  <jemarch@gnu.org>
 
+	* src/Makefile.am (cockroach_LDADD): Use $top_builddir in paths.
+	* src/plugins/inhibit/Makefile.am (AM_CFLAGS): Use $srcdir in
+	paths.
+
+2015-03-29  Jose E. Marchesi  <jemarch@gnu.org>
+
 	* src/cockroach.c (cockroach_print_version): Copyright years updated.
 
 2015-03-29  Jose E. Marchesi  <jemarch@gnu.org>

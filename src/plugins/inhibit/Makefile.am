@@ -16,7 +16,7 @@
 
 lib_LTLIBRARIES = libinhibit.la
 
-AM_CFLAGS=-I../..
+AM_CFLAGS=-I$(srcdir)/../..
 
 libdir=@libdir@/roach/plugins/
 
