@@ -115,7 +115,7 @@ Copyright (C) %s Jose E. Marchesi.\n\
 Copyright (C) %s Giuseppe Scrivano.\n\
 License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.\n\
 This is free software: you are free to change and redistribute it.\n\
-There is NO WARRANTY, to the extent permitted by law.\n"), "2011", "2011");
+There is NO WARRANTY, to the extent permitted by law.\n"), "2011-2015", "2011-2015");
 
   puts (_("\
 \n\

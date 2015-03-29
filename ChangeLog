@@ -1,5 +1,9 @@
 2015-03-29  Jose E. Marchesi  <jemarch@gnu.org>
 
+	* src/cockroach.c (cockroach_print_version): Copyright years updated.
+
+2015-03-29  Jose E. Marchesi  <jemarch@gnu.org>
+
 	* .gitignore: updated.
 
 2015-03-29  Jose E. Marchesi  <jemarch@gnu.org>
