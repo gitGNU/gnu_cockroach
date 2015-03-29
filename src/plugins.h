@@ -1,5 +1,5 @@
 /*
-   cockroach utility.
+   cockroach plugins.
 
    Copyright (C) 2011-2015 Jose E. Marchesi <jemarch@gnu.org>
    Copyright (C) 2011-2015 Giuseppe Scrivano <gscrivano@gnu.org>
