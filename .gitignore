@@ -28,3 +28,4 @@ po/stamp-po
 src/cockroach
 stamp-h1
 stamp-h2
+src/config.h.in
