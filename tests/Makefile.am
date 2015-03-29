@@ -1,6 +1,7 @@
 # Makefile for the test directory of GNU cockroach.
 #
-# Copyright 2011 Free Software Foundation, Inc.
+# Copyright (c) 2011-2015 Jose E. Marchesi
+# Copyright (c) 2011-2015 Giuseppe Scrivano
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

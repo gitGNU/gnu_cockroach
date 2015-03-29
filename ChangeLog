@@ -1,3 +1,21 @@
+2015-03-29  Jose E. Marchesi  <jemarch@gnu.org>
+
+	copyright years updated and program name fixed in notices.
+	* src/bitmap.c: Fix program name in copyright notice, and update
+	year.
+	* README-dev: Likewise.
+	* Makefile.am: Likewise.
+	* ChangeLog: Likewise.
+	* tests/test_bitmap.c: Likewise.
+	* tests/Makefile.am: Likewise.
+	* src/plugins/inhibit/Makefile.am: Likewise.
+	* src/plugins/inhibit/inhibit.c: Likewise.
+	* src/arch/linux_generic.c: Likewise.
+	* src/arch/linux_i386.c: Likewise.
+	* src/plugins.c: Likewise.
+	* src/Makefile.am: Likewise.
+	* src/bitmap.h: Likewise.
+
 2011-11-25  Giuseppe Scrivano  <giuseppe@southpole.se>
 
 	add plugins support.
@@ -183,8 +201,8 @@
 
 	* README: New file.
 
-Copyright 2011 Jose E. Marchesi
-Copyright 2011 Giuseppe Scrivano
+Copyright 2011-2015 Jose E. Marchesi
+Copyright 2011-2015 Giuseppe Scrivano
 
 Copying and distribution of this file, with or without modification, are
 permitted in any medium without royalty provided the copyright notice
