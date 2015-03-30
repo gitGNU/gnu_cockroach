@@ -1,5 +1,5 @@
-# Copyright 2011 Giuseppe Scrivano.
-# Copyright 2011 Jose E. Marchesi.
+# Copyright 2011-2015 Giuseppe Scrivano.
+# Copyright 2011-2015 Jose E. Marchesi.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,11 +14,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-lib_LTLIBRARIES = libfail_mem.la
+lib_LTLIBRARIES = fail_mem.la
 
 AM_CFLAGS=-I../..
 
 libdir=@libdir@/roach/plugins/
 
-libfail_mem_la_SOURCES = fail_mem.c
-libfail_mem_la_LDFLAGS = -shared
+fail_mem_la_SOURCES = fail_mem.c
+fail_mem_la_LDFLAGS = -shared -module

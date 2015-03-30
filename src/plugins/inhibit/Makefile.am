@@ -14,11 +14,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-lib_LTLIBRARIES = libinhibit.la
+lib_LTLIBRARIES = inhibit.la
 
 AM_CFLAGS=-I$(srcdir)/../..
 
 libdir=@libdir@/roach/plugins/
 
-libinhibit_la_SOURCES = inhibit.c
-libinhibit_la_LDFLAGS = -shared
+inhibit_la_SOURCES = inhibit.c
+inhibit_la_LDFLAGS = -shared -module

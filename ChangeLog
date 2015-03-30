@@ -1,3 +1,19 @@
+2015-03-30  Jose E. Marchesi  <jemarch@gnu.org>
+
+	install plugins without the 'lib' prefix.
+	* src/plugins/fail_mem/Makefile.am (lib_LTLIBRARIES): libfail_mem
+	renamed to fail_mem.
+	(fail_mem_la_SOURCES): Renamed from libfail_mem_la_SOURCES.
+	(fail_mem_la_LDFLAGS): Renamed from libfail_mem_la_LDFLAGS.
+	* src/plugins/fail_mem/Makefile.am (libfail_mem_la_LDFLAGS): Use
+	-module.
+
+	* src/plugins/inhibit/Makefile.am (lib_LTLIBRARIES): libinhibit
+	renamed to inhibit.
+	(inhibit_la_SOURCES): Renamed from libinhibit_la_SOURCES.
+	(inhibit_la_LDFLAGS): Renamed from libinhibit_la_LDFLAGS.
+	(inhibit_la_LDFLAGS): Use -module.
+
 2015-03-29  Jose E. Marchesi  <jemarch@gnu.org>
 
 	* src/plugins.c: header fixed.
