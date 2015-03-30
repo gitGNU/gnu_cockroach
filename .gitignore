@@ -3,6 +3,10 @@
 *~
 .deps
 /ABOUT-NLS
+.deps
+/ABOUT-NLS
+/ABOUT-NLS~
+>>>>>>> 0e0aaa0dd16cc043f86fabd4c6ee6f621ca2be40
 /build-aux
 /m4
 COPYING
@@ -29,3 +33,6 @@ src/cockroach
 stamp-h1
 stamp-h2
 src/config.h.in
+stamp-h1
+stamp-h2
+

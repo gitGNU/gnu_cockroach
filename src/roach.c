@@ -24,6 +24,7 @@
 #include <sys/wait.h>
 #include <stdlib.h>
 #include <sys/ptrace.h>
+#include <errno.h>
 
 #include "roach.h"
 
@@ -127,45 +128,49 @@ roach_ctx_rm_hook (roach_context_t *ctx, roach_hook_t *hook)
 }
 
 int
-roach_rot_function (roach_context_t *ctx, void (*function) (void *), void *data)
-{
-  pid_t pid = fork ();
-  if (pid == 0)
-    {
-      if (ptrace (PTRACE_TRACEME, 0, NULL, NULL) < 0)
-        exit (EXIT_FAILURE);
-      function (data);
-      exit (EXIT_FAILURE);
-    }
-  wait (NULL);
-  ctx->pid = pid;
-  return pid;
-}
-
-int
 roach_rot_process (roach_context_t *ctx, char const *exec, char *const *argv)
 {
   pid_t pid = fork ();
+  long options = PTRACE_O_TRACEEXIT
+    | PTRACE_O_TRACEFORK
+    | PTRACE_O_TRACEVFORK
+    | PTRACE_O_TRACECLONE;
   if (pid == 0)
     {
       if (ptrace (PTRACE_TRACEME, 0, NULL, NULL) < 0)
         exit (EXIT_FAILURE);
-      execv (exec, argv);
+      raise (SIGSTOP);
+      execvp (exec, argv);
       exit (EXIT_FAILURE);
     }
-  wait (NULL);
+  else
+    {
+      wait (NULL);
+      if (ptrace (PTRACE_SETOPTIONS, pid, NULL, options))
+        error (EXIT_FAILURE, errno, "error setting ptrace options %i", ctx->pid);
+      kill (pid, SIGCONT);
+    }
+
   ctx->pid = pid;
   return pid;
 }
 
 int
-roach_wait (roach_context_t *ctx, int *status)
+roach_wait (roach_context_t *ctx)
 {
-  int ret, syscall;
+  pid_t ret;
+  int syscall;
   roach_hook_t *hook;
-
+  int status = 0;
   ptrace (PTRACE_SYSCALL, ctx->pid, NULL, NULL);
-  ret = waitpid (ctx->pid, status, 0);
+  ret = waitpid (-1, &status, 0);
+
+  if (WIFSTOPPED (status))
+    {
+      if (ptrace (PTRACE_CONT, ret, NULL, NULL) < 0)
+        error (EXIT_FAILURE, errno, "waking up process");
+      return 1;
+    }
 
   if (ret > 0)
     ctx->entering_sc = !ctx->entering_sc;
@@ -188,7 +193,10 @@ roach_wait (roach_context_t *ctx, int *status)
         hook->hook (ctx, ctx->entering_sc, hook->data);
     }
 
-  return ret;
+  if (ret == ctx->pid && WIFEXITED (status))
+    return 0;
+
+  return 1;
 }
 
 bool

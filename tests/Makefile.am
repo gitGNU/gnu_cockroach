@@ -19,8 +19,9 @@
 check_PROGRAMS = test_bitmap
 
 AM_CFLAGS = -I$(top_srcdir)/src
-LDADD = @LIBINTL@ ../lib/libcockroach.a ../src/libroach.a
+LDADD = @LIBINTL@ ../lib/libcockroach.la ../src/libroach.la
 
 test_bitmap_SOURCES = test_bitmap.c
+test_bitmap_LDFLAGS = -ldl
 
 TESTS = $(check_PROGRAMS)

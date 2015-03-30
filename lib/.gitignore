@@ -1,3 +1,9 @@
+/c-ctype.c
+/c-ctype.h
+/c-strcase.h
+/c-strcasecmp.c
+/c-strcaseeq.h
+/c-strncasecmp.c
 /close-stream.c
 /close-stream.h
 /closeout.c
@@ -36,6 +42,7 @@
 /pathmax.h
 /progname.c
 /progname.h
+/quote.h
 /quotearg.c
 /quotearg.h
 /ref-add.sed
@@ -47,6 +54,8 @@
 /stdbool.in.h
 /stddef.h
 /stddef.in.h
+/stdio.h
+/stdio.in.h
 /stdlib.h
 /stdlib.in.h
 /streq.h
@@ -58,13 +67,17 @@
 /sys
 /sys_stat.h
 /sys_stat.in.h
+/sys_types.h
+/sys_types.in.h
 /time.h
 /time.in.h
+/unistd.c
 /unistd.h
 /unistd.in.h
 /verify.h
 /wchar.h
 /wchar.in.h
+/wctype-h.c
 /wctype.h
 /wctype.in.h
 /xalloc-die.c

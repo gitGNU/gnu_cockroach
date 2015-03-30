@@ -130,6 +130,7 @@ main (int argc, char **argv)
   char c;
   int ret;
   char *child_program_name;
+  int max_argc;
 
   /* Initialization.  */
 
@@ -140,8 +141,10 @@ main (int argc, char **argv)
   textdomain (PACKAGE);
 
   /* Process the command line arguments for cockroach.  */
-
-  while ((ret = getopt_long (argc,
+  for (max_argc = 1; max_argc < argc; max_argc++)
+    if (argv[max_argc][0] != '-')
+      break;
+  while ((ret = getopt_long (max_argc,
                              argv,
                              "",
                              long_options,
@@ -203,13 +206,7 @@ main (int argc, char **argv)
   if (pid < 0)
     error (EXIT_FAILURE, errno, "spawn process");
 
-  for (;;)
-    {
-      int status;
-      roach_wait (ctx, &status);
-      if (WIFEXITED (status))
-        break;
-    }
+  while (roach_wait (ctx));
 
   return 0;
 }

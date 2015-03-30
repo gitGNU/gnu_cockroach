@@ -20,8 +20,6 @@ AC_PREREQ(2.60)
 
 AC_CONFIG_MACRO_DIR([m4])
 
-# Where to generate output; srcdir location.
-AC_CONFIG_HEADERS([config.h:config.in])dnl Keep filename to 8.3 for MS-DOS.
 AC_CONFIG_SRCDIR([src/cockroach.c])
 
 dnl Checks for programs.
@@ -61,8 +59,8 @@ else
 fi
 
 # i18n support from GNU gettext.
-AM_GNU_GETTEXT_VERSION([0.18.1])
-AM_GNU_GETTEXT([external])
+AM_GNU_GETTEXT([external],[need-ngettext])
+AM_GNU_GETTEXT_VERSION([0.17])
 
 AC_CONFIG_FILES([Makefile \
            doc/Makefile \
@@ -70,6 +68,7 @@ AC_CONFIG_FILES([Makefile \
            po/Makefile.in \
            src/Makefile \
            src/plugins/Makefile \
+           src/plugins/fail_mem/Makefile \
            src/plugins/inhibit/Makefile \
            tests/Makefile])
 AC_OUTPUT

@@ -18,10 +18,9 @@
    along with the program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "../roach.h"
 #include <sys/reg.h>
 #include <bits/wordsize.h>
-
-#include "../roach.h"
 
 /* The following constants describe the layout of the USER section of
    the child process bein peek/poked and are used in the
@@ -35,7 +34,7 @@
 #if __WORDSIZE == 64
 #   define SC_REG_SIZE  (sizeof (unsigned long))
 #   define SC_REG_ADDR  (SC_REG_SIZE * ORIG_RAX)
-#   define SC_RET_ADDR  (SC_REG_SIZE * ORIG_RAX)
+#   define SC_RET_ADDR  (SC_REG_SIZE * RAX)
 #   define SC_ARG1_ADDR (SC_REG_SIZE * RBX)
 #   define SC_ARG2_ADDR (SC_REG_SIZE * RCX)
 #   define SC_ARG3_ADDR (SC_REG_SIZE * RDX)
@@ -44,7 +43,7 @@
 #else
 #   define SC_REG_SIZE  (sizeof (long int))
 #   define SC_REG_ADDR  (SC_REG_SIZE * ORIG_EAX)
-#   define SC_RET_ADDR  (SC_REG_SIZE * ORIG_EAX)
+#   define SC_RET_ADDR  (SC_REG_SIZE * EAX)
 #   define SC_ARG1_ADDR (SC_REG_SIZE * EBX)
 #   define SC_ARG2_ADDR (SC_REG_SIZE * ECX)
 #   define SC_ARG3_ADDR (SC_REG_SIZE * EDX)

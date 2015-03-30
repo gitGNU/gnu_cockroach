@@ -40,7 +40,66 @@
 	* src/Makefile.am: Likewise.
 	* src/bitmap.h: Likewise.
 
+2015-03-24  Giuseppe Scrivano  <gscrivan@redhat.com>
+
+	* src/cockroach.c (main): roach_wait doesn't return a status
+	anymore.
+	* src/roach.c (roach_wait): Wake up stopped processes.
+
+2015-03-21  Giuseppe Scrivano  <gscrivan@redhat.com>
+
+	* src/roach.c (roach_rot_process): Trace child processes too.
+
+	* src/cockroach.c (main): do not process arguments to the process.
+
+	* src/plugins/inhibit/inhibit.c (plugin_add): Permit to specify
+	return code.
+
+	* README: Improve description.
+
+2015-03-17  Giuseppe Scrivano  <gscrivan@redhat.com>
+
+	* src/Makefile.am (cockroach_LDADD): Use libcockroach.la not
+	libcockroach.a.
+	* tests/Makefile.am (cockroach_LDADD): Likewise.
+	* src/roach.h: Include <config.h>.
+	* src/plugins/fail_mem/fail_mem.c (plugin_add): Check if __NR_mmap2
+	exists before using it.
+
+2014-06-28  Giuseppe Scrivano  <gscrivan@redhat.com>
+
+	* configure.ac: Remove spurious AC_CONFIG_HEADERS.
+
+	* configure.ac: Use external gettext.
+	* bootstrap.conf (gnulib_modules): Remove gettext module.
+
+	* bootstrap: Update from gnulib.
+
+2011-12-07  Giuseppe Scrivano  <giuseppe@southpole.se>
+
+	locate a program in PATH.
+	* src/roach.c (roach_rot_process): Use execvp instead of execvp.
+
+2011-11-25  Giuseppe Scrivano  <gscrivano@gnu.org>
+
+	do not use syscall magic numbers.
+	* src/plugins/fail_mem/fail_mem.c: Include <syscall.h>
+	(plugin_add): Use __NR_brk and __NR_mmap2 instead of magic numbers.
+
 2011-11-25  Giuseppe Scrivano  <giuseppe@southpole.se>
+
+	fail_mem: new plugin.
+	* configure.ac: Generate the makefile for the fail_mem plugin.
+	* src/plugins/Makefile.am (SUBDIRS): Add fail_mem.
+	* src/plugins/fail_mem/fail_mem.c (libfail_mem_la_LDFLAGS): New file.
+	* src/plugins/fail_mem/Makefile.am (libfail_mem_la_LDFLAGS): New file.
+
+	fix syscall return value register.
+	* src/arch/linux_i386.c (SC_RET_ADDR): Fix syscall return register.
+	* src/arch/linux_x86_64.c (SC_RET_ADDR): Likewise.
+
+	fix test suite build.
+	* tests/Makefile.am (LDADD): Use libroach.la instead of libroach.a
 
 	add plugins support.
 	* src//plugins.h: New file.
