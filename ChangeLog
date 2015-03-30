@@ -1,5 +1,10 @@
 2015-03-30  Jose E. Marchesi  <jemarch@gnu.org>
 
+	* lib/Makefile.am: Updated.
+	* src/config.h.in: Likewise.
+
+2015-03-30  Jose E. Marchesi  <jemarch@gnu.org>
+
 	install plugins without the 'lib' prefix.
 	* src/plugins/fail_mem/Makefile.am (lib_LTLIBRARIES): libfail_mem
 	renamed to fail_mem.
