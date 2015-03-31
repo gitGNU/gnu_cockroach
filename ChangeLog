@@ -1,3 +1,16 @@
+2015-04-01  Jose E. Marchesi  <jemarch@gnu.org>
+
+	* Makefile.am.common: New file.
+	(plugindir): Defined.
+
+	* src/plugins/inhibit/Makefile.am: Include Makefile.am.common.
+	(plugin_LTLIBRARIES): Renamed from lib_LTLIBRARIES.
+
+	* src/plugins/fail_mem/Makefile.am: Include Makefile.am.common.
+	(plugin_LTLIBRARIES): Renamed from lib_LTLIBRARIES.
+
+
+
 2015-03-30  Jose E. Marchesi  <jemarch@gnu.org>
 
 	* lib/Makefile.am: Updated.

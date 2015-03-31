@@ -14,11 +14,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-lib_LTLIBRARIES = inhibit.la
+include $(top_srcdir)/Makefile.am.common
 
 AM_CFLAGS=-I$(srcdir)/../..
 
-libdir=@libdir@/roach/plugins/
-
+plugin_LTLIBRARIES = inhibit.la
 inhibit_la_SOURCES = inhibit.c
 inhibit_la_LDFLAGS = -shared -module
