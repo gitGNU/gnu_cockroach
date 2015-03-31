@@ -84,3 +84,6 @@
 /xalloc-oversized.h
 /xalloc.h
 /xmalloc.c
+/dirent-private.h
+/dirent.in.h
+/readdir.c
