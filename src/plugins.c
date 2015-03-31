@@ -25,6 +25,10 @@
 
 #include <stdio.h>
 
+#include <alloca.h>
+#include <string.h>
+#include <dirent.h>
+
 typedef const char * (*plugin_get_name_hook_t) ();
 typedef int (*plugin_load_hook_t) (roach_context_t *ctx);
 typedef int (*plugin_free_hook_t) (roach_context_t *ctx);
@@ -118,4 +122,35 @@ plugins_free (roach_context_t *ctx)
       free (p);
     }
 
+}
+
+int
+plugins_load_dir (roach_context_t *ctx,
+                  const char *directory)
+{
+  DIR *dir;
+  struct dirent *entry;
+
+  dir = opendir (directory);
+  if (dir == NULL)
+    return -1;
+
+  while (entry = readdir (dir))
+    {
+      char *suffix = strrchr (entry->d_name, '.');
+      if (strcmp (suffix, ".so") == 0)
+        {
+          char *plugin
+            = alloca (strlen (directory) + 1 + strlen (entry->d_name) + 1);
+          plugin[0] = '\0';
+          plugin = strcat (plugin, directory);
+          plugin = strcat (plugin, "/");
+          plugin = strcat (plugin, entry->d_name);
+          
+          if (plugins_load (ctx, plugin) < 0)
+            return -1;
+        }
+    }
+
+  return 0;
 }

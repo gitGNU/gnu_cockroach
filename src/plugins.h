@@ -27,4 +27,6 @@ int plugins_load (roach_context_t *ctx, const char *file);
 int plugins_load_instance (roach_context_t *ctx, const char *name, const char *options);
 int plugins_free (roach_context_t *ctx);
 
+int plugins_load_dir (roach_context_t *ctx, const char *directory);
+
 #endif

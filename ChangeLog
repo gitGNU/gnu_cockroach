@@ -1,5 +1,22 @@
 2015-04-01  Jose E. Marchesi  <jemarch@gnu.org>
 
+	* src/cockroach.c (main): Call plugins_load_dir.
+	(cockroach_print_help): Help string updated to reflect the new
+	semantics of --plugin and --load-plugins.
+	(main): Updated to handle ADD_PLUGIN_ARG and PLUGIN_ARG command
+	line options.
+	(ADD_PLUGIN_ARG): New enum.
+	(PLUGIN_ARG): Renamed from PLUGIN_ADD_ARG.
+	(main): Print an error message and exit with an error status if
+	the loading of a plugin fails.
+
+	* src/plugins.c (plugins_load_dir): New function.
+
+	* src/Makefile.am: Include Makefile.am.common.
+	(AM_CPPFLAGS): Define PLUGINDIR.
+
+2015-04-01  Jose E. Marchesi  <jemarch@gnu.org>
+
 	* Makefile.am.common: New file.
 	(plugindir): Defined.
 

@@ -38,6 +38,7 @@ extern char *program_name;
 enum
 {
   HELP_ARG,
+  ADD_PLUGIN_ARG,
   PLUGIN_ARG,
   PLUGIN_ADD_ARG,
   VERSION_ARG
@@ -47,7 +48,7 @@ static const struct option long_options[] =
 {
   {"help", no_argument, NULL, HELP_ARG},
   {"plugin", required_argument, NULL, PLUGIN_ARG},
-  {"plugin-add", required_argument, NULL, PLUGIN_ADD_ARG},
+  {"add-plugin", required_argument, NULL, ADD_PLUGIN_ARG},
   {"version", no_argument, NULL, VERSION_ARG},
   {NULL, 0, NULL, 0}
 };
@@ -70,8 +71,8 @@ Alter the running environment of your program.\n"), stdout);
      no-wrap */
   fputs (_("\
       --help                           print a help message and exit.\n\
-      --plugin=PLUGIN                  load the plugin file\n\
-      --plugin-add=PLUGIN_NAME:OPTIONS add a plugin instance\n\
+      --plugin=PLUGIN_NAME:OPTIONS     add a plugin instance\n\
+      --load-plugin=PLUGIN             load a plugin from a file\n\
       --version                        show version and exit.\n"),
          stdout);
 
@@ -140,6 +141,8 @@ main (int argc, char **argv)
   bindtextdomain (PACKAGE, LOCALEDIR);
   textdomain (PACKAGE);
 
+  plugins_load_dir (ctx, PLUGINDIR);
+
   /* Process the command line arguments for cockroach.  */
   for (max_argc = 1; max_argc < argc; max_argc++)
     if (argv[max_argc][0] != '-')
@@ -159,12 +162,12 @@ main (int argc, char **argv)
             exit (EXIT_SUCCESS);
             break;
           }
-        case PLUGIN_ARG:
+        case ADD_PLUGIN_ARG:
           {
             plugins_load (ctx, optarg);
             break;
           }
-        case PLUGIN_ADD_ARG:
+        case PLUGIN_ARG:
           {
             char *opt;
             char *data = strdup (optarg);
@@ -172,10 +175,18 @@ main (int argc, char **argv)
               exit (EXIT_FAILURE);
             opt = strchr (data, ':');
             if (opt == NULL)
-              exit (EXIT_FAILURE);
+              {
+                fprintf (stderr, "error: bad format in --plugin\n");
+                exit (EXIT_FAILURE);
+              }
             *opt = '\0';
 
-            plugins_load_instance (ctx, data, opt + 1);
+            if (plugins_load_instance (ctx, data, opt + 1) < 0)
+              {
+                fprintf (stderr, "error: instantiating plugin %s\n", data);
+                exit (EXIT_FAILURE);
+              }
+            
             free (data);
             break;
           }

@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+include $(top_srcdir)/Makefile.am.common
+
 bin_PROGRAMS = cockroach
 inst_LTLIBRARIES = libroach.la
 
@@ -44,4 +46,4 @@ cockroach_LDADD = @LIBINTL@ $(top_builddir)/lib/libcockroach.la libroach.la
 cockroach_LDADD = @LIBINTL@ ../lib/libcockroach.la libroach.la
 
 AM_CPPFLAGS = -I$(top_srcdir)/lib -I$(top_builddir)/lib \
-              -DLOCALEDIR=\"$(localedir)\"
+              -DLOCALEDIR=\"$(localedir)\" -DPLUGINDIR=\"$(plugindir)\"
