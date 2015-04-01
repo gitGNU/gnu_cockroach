@@ -1,3 +1,5 @@
+-*- mode: org -*-
+
 * Use Thread Local Storage for maintaining the context data
 
   Different threads may enter/leave a syscall at the same time, leaving
