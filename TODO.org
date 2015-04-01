@@ -1,4 +1,5 @@
 * Use Thread Local Storage for maintaining the context data
-+ Different threads may enter/leave a syscall at the same time, leaving
-+ the context data in an inconsistent form.  Ensure that each thread has
-+ its own data.
+
+  Different threads may enter/leave a syscall at the same time, leaving
+  the context data in an inconsistent form.  Ensure that each thread has
+  its own data.
