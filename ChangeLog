@@ -1,5 +1,11 @@
 2015-04-02  Giuseppe Scrivano  <gscrivan@redhat.com>
 
+	* src/roach.h (roach_context_s): Add root_pid.  Rename pid to
+	current_pid.
+	* src/roach.c (roach_ctx_get_pid): New function.
+	* src/arch/linux_generic.c (roach_set_sc): Use roach_ctx_get_pid
+	instead of accessing ctx->pid everywhere.
+
 	* src/roach.c (roach_wait): Simplify some code.
 
 	* TODO: TLS won't be useful, as there is only one process running,

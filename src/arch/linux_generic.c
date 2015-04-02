@@ -51,25 +51,25 @@ roach_get_sc (roach_context_t *ctx)
   if (! ctx->entering_sc)
     return ctx->last_syscall;
 
-  return ptrace (PTRACE_PEEKUSER, ctx->pid, SC_REG_ADDR, syscall);
+  return ptrace (PTRACE_PEEKUSER, roach_ctx_get_pid (ctx), SC_REG_ADDR, syscall);
 }
 
 long
 roach_set_sc (roach_context_t *ctx, int syscall)
 {
-  return ptrace (PTRACE_POKEUSER, ctx->pid, SC_REG_ADDR, syscall);
+  return ptrace (PTRACE_POKEUSER, roach_ctx_get_pid (ctx), SC_REG_ADDR, syscall);
 }
 
 long
 roach_get_sc_ret (roach_context_t *ctx)
 {
-  return ptrace (PTRACE_PEEKUSER, ctx->pid, SC_RET_ADDR, 0);
+  return ptrace (PTRACE_PEEKUSER, roach_ctx_get_pid (ctx), SC_RET_ADDR, 0);
 }
 
 long
 roach_set_sc_ret (roach_context_t *ctx, int retval)
 {
-  return ptrace (PTRACE_POKEUSER, ctx->pid, SC_RET_ADDR, retval);
+  return ptrace (PTRACE_POKEUSER, roach_ctx_get_pid (ctx), SC_RET_ADDR, retval);
 }
 
 long
@@ -102,7 +102,7 @@ roach_set_sc_arg (roach_context_t *ctx, int arg, void *data)
       return -1;
     }
 
-  return ptrace (PTRACE_POKEUSER, ctx->pid, reg_address, data);
+  return ptrace (PTRACE_POKEUSER, roach_ctx_get_pid (ctx), reg_address, data);
 }
 
 long
@@ -135,7 +135,7 @@ roach_get_sc_arg (roach_context_t *ctx, int arg)
       return -1;
     }
 
-  return ptrace (PTRACE_PEEKUSER, ctx->pid, reg_address, NULL);
+  return ptrace (PTRACE_PEEKUSER, roach_ctx_get_pid (ctx), reg_address, NULL);
 }
 
 int
@@ -147,11 +147,11 @@ roach_write_mem (roach_context_t *ctx, const char const *data,
     {
       long tmp;
       long to_read = min (len, sizeof (long) - OFFSET (addr));
-      tmp = ptrace (PTRACE_PEEKDATA, ctx->pid, addr, NULL);
+      tmp = ptrace (PTRACE_PEEKDATA, roach_ctx_get_pid (ctx), addr, NULL);
 
       memcpy (&tmp, data, to_read);
 
-      ptrace (PTRACE_POKEDATA, ctx->pid, addr, tmp);
+      ptrace (PTRACE_POKEDATA, roach_ctx_get_pid (ctx), addr, tmp);
       len -= to_read;
       data += to_read;
       addr += to_read;
@@ -159,7 +159,7 @@ roach_write_mem (roach_context_t *ctx, const char const *data,
 
   for (i = 0; i < len / sizeof (long); i++)
     {
-      ptrace (PTRACE_POKEDATA, ctx->pid, addr, *((long *) data++));
+      ptrace (PTRACE_POKEDATA, roach_ctx_get_pid (ctx), addr, *((long *) data++));
       len -= sizeof (long);
       addr += sizeof (long);
     }
@@ -167,9 +167,9 @@ roach_write_mem (roach_context_t *ctx, const char const *data,
   if (len)
     {
       long tmp;
-      tmp = ptrace (PTRACE_PEEKDATA, ctx->pid, addr, NULL);
+      tmp = ptrace (PTRACE_PEEKDATA, roach_ctx_get_pid (ctx), addr, NULL);
       memcpy (&tmp, data, len);
-      ptrace (PTRACE_POKEDATA, ctx->pid, addr, tmp);
+      ptrace (PTRACE_POKEDATA, roach_ctx_get_pid (ctx), addr, tmp);
     }
 
   return 0;
@@ -184,7 +184,7 @@ roach_read_mem (roach_context_t *ctx, char *data,
     {
       long tmp;
       long to_read = min (len, sizeof (long) - OFFSET (addr));
-      tmp = ptrace (PTRACE_PEEKDATA, ctx->pid, addr, NULL);
+      tmp = ptrace (PTRACE_PEEKDATA, roach_ctx_get_pid (ctx), addr, NULL);
 
       memcpy (data, &tmp, to_read);
 
@@ -195,7 +195,7 @@ roach_read_mem (roach_context_t *ctx, char *data,
 
   for (i = 0; i < len / sizeof (long); i++)
     {
-      *((long *) data++) = ptrace (PTRACE_PEEKDATA, ctx->pid,
+      *((long *) data++) = ptrace (PTRACE_PEEKDATA, roach_ctx_get_pid (ctx),
                                    addr, NULL);
       len -= sizeof (long);
       addr += sizeof (long);
@@ -204,7 +204,7 @@ roach_read_mem (roach_context_t *ctx, char *data,
   if (len)
     {
       long tmp;
-      tmp = ptrace (PTRACE_PEEKDATA, ctx->pid, addr, NULL);
+      tmp = ptrace (PTRACE_PEEKDATA, roach_ctx_get_pid (ctx), addr, NULL);
       memcpy (data, &tmp, len);
     }
 

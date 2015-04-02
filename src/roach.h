@@ -56,7 +56,9 @@ roach_hook_t;
 
 typedef struct roach_context_s
 {
-  int pid;
+  /* Root process.  */
+  pid_t root_pid;
+  pid_t current_pid;
   roach_hook_t *hooks;
   int last_syscall;
   bool entering_sc;
@@ -81,6 +83,9 @@ pid_t roach_spawn_process (roach_context_t *ctx, char const *exec,
 int roach_wait (roach_context_t *ctx);
 
 bool roach_entering_sc_p (roach_context_t *ctx);
+
+/* Return the process causing the break.  */
+pid_t roach_ctx_get_pid (roach_context_t *ctx);
 
 /* Architecture specific functions.  */
 long roach_get_sc (roach_context_t *ctx);
