@@ -213,7 +213,7 @@ roach_read_mem (roach_context_t *ctx, char *data,
 #ifndef ARCH_HAS_SYSCALL_INHIBIT
 
 int
-roach_syscall_inhibit (roach_context_t *ctx, bool enter, void *data)
+roach_syscall_inhibit (roach_context_t *ctx, pid_t pid, bool enter, void *data)
 {
   /* Use the sys_getpid=20 syscall instead of the original one.
    DATA will be used as return value from the syscall.  */

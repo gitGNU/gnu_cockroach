@@ -31,7 +31,7 @@ fail_mem_s
 };
 
 static int
-fail_mem (struct roach_context_s *ctx, bool enter, void *datap)
+fail_mem (struct roach_context_s *ctx, pid_t pid, bool enter, void *datap)
 {
   struct fail_mem_s *data = (struct fail_mem_s *) datap;
   long arg0 = roach_get_sc_arg (ctx, 1);
@@ -52,7 +52,7 @@ fail_mem (struct roach_context_s *ctx, bool enter, void *datap)
   if (data->counter >= data->fail_at)
     {
       if (enter && arg0 > 0)
-        roach_syscall_inhibit (ctx, enter, NULL);
+        roach_syscall_inhibit (ctx, pid, enter, NULL);
 
       if (! enter)
         roach_set_sc_ret (ctx, 0);

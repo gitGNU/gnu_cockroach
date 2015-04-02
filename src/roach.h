@@ -36,7 +36,8 @@ enum HOOK_TYPE
 
 struct roach_context_s;
 
-typedef int (*hook_func_t) (struct roach_context_s *ctx, bool enter, void *data);
+typedef int (*hook_func_t) (struct roach_context_s *ctx, pid_t pid, bool enter,
+                            void *data);
 
 typedef struct s_hook
 {
@@ -94,7 +95,8 @@ int roach_read_mem (roach_context_t *ctx, char *data,
                     const char const *addr, size_t len);
 
 /* Facilities.  */
-int roach_syscall_inhibit (roach_context_t *ctx, bool enter, void *data);
+int roach_syscall_inhibit (roach_context_t *ctx, pid_t pid, bool enter,
+                           void *data);
 int roach_reg_syscall (roach_context_t *ctx, int syscall,
                        hook_func_t hook_func, void *data);
 

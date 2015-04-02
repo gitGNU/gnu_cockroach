@@ -190,7 +190,7 @@ roach_wait (roach_context_t *ctx)
 
       /* What to do with the return code?  */
       if (roach_bitmap_p (hook->syscalls, syscall))
-        hook->hook (ctx, ctx->entering_sc, hook->data);
+        hook->hook (ctx, ret, ctx->entering_sc, hook->data);
     }
 
   if (ret == ctx->pid && WIFEXITED (status))
