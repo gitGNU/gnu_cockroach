@@ -61,6 +61,9 @@ typedef struct roach_context_s
   pid_t current_pid;
   roach_hook_t *hooks;
   int last_syscall;
+
+  /* FIXME: replace with a hashmap that maps
+     pid -> entering_sc instead of having just one.  */
   bool entering_sc;
 }
 roach_context_t;
