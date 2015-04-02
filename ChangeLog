@@ -1,5 +1,8 @@
 2015-04-02  Giuseppe Scrivano  <gscrivan@redhat.com>
 
+	* TODO: TLS won't be useful, as there is only one process running,
+	make it clear.
+
 	* src/arch/linux_generic.c (roach_syscall_inhibit): Remove magic
 	number and use __NR_getpid.
 
