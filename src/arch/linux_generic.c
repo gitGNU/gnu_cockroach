@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <string.h>
+#include <syscall.h>
 
 /* Note that the functions in this file require for the following
    constants to be defined somewhere else:
@@ -215,10 +216,10 @@ roach_read_mem (roach_context_t *ctx, char *data,
 int
 roach_syscall_inhibit (roach_context_t *ctx, pid_t pid, bool enter, void *data)
 {
-  /* Use the sys_getpid=20 syscall instead of the original one.
+  /* Use the getpid syscall instead of the original one.
    DATA will be used as return value from the syscall.  */
    if (enter)
-    roach_set_sc (ctx, 20);
+    roach_set_sc (ctx, __NR_getpid);
   else
     roach_set_sc_ret (ctx, (long) data);
 
