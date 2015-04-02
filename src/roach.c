@@ -145,10 +145,10 @@ roach_rot_process (roach_context_t *ctx, char const *exec, char *const *argv)
     }
   else
     {
-      wait (NULL);
-      if (ptrace (PTRACE_SETOPTIONS, pid, NULL, options))
-        error (EXIT_FAILURE, errno, "error setting ptrace options %i", ctx->pid);
-      kill (pid, SIGCONT);
+      waitpid (pid, NULL, 0);
+
+      if (ptrace (PTRACE_SETOPTIONS, pid, NULL, options) < 0)
+        error (EXIT_FAILURE, errno, "error setting ptrace options %i", pid);
     }
 
   ctx->pid = pid;
@@ -162,23 +162,13 @@ roach_wait (roach_context_t *ctx)
   int syscall;
   roach_hook_t *hook;
   int status = 0;
-  ptrace (PTRACE_SYSCALL, ctx->pid, NULL, NULL);
+
+  if (ptrace (PTRACE_SYSCALL, ctx->pid, NULL, NULL) < 0)
+    error (EXIT_FAILURE, errno, "waking up process");
+
   ret = waitpid (-1, &status, 0);
 
-  if (WIFSTOPPED (status))
-    {
-      if (ptrace (PTRACE_CONT, ret, NULL, NULL) < 0)
-        error (EXIT_FAILURE, errno, "waking up process");
-      return 1;
-    }
-
-  if (ret > 0)
-    ctx->entering_sc = !ctx->entering_sc;
-
-  if (ctx->entering_sc)
-    ctx->last_syscall = syscall = roach_get_sc (ctx);
-  else
-    syscall = ctx->last_syscall;
+  ctx->last_syscall = syscall = roach_get_sc (ctx);
 
   for (hook = ctx->hooks; hook; hook = hook->next)
     {
@@ -192,6 +182,9 @@ roach_wait (roach_context_t *ctx)
       if (roach_bitmap_p (hook->syscalls, syscall))
         hook->hook (ctx, ret, ctx->entering_sc, hook->data);
     }
+
+  if (ret == ctx->pid)
+    ctx->entering_sc = !ctx->entering_sc;
 
   if (ret == ctx->pid && WIFEXITED (status))
     return 0;

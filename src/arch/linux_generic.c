@@ -218,7 +218,7 @@ roach_syscall_inhibit (roach_context_t *ctx, pid_t pid, bool enter, void *data)
 {
   /* Use the getpid syscall instead of the original one.
    DATA will be used as return value from the syscall.  */
-   if (enter)
+  if (enter)
     roach_set_sc (ctx, __NR_getpid);
   else
     roach_set_sc_ret (ctx, (long) data);
