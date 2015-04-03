@@ -1,5 +1,8 @@
 2015-04-03  Giuseppe Scrivano  <gscrivan@redhat.com>
 
+	* src/plugins/inhibit/inhibit.c (plugin_add): Support referring
+	to syscalls by name.
+
 	* src/cockroach.c (main): Invoke syscall_names_initialize.
 	* src/Makefile.am (syscall_names.c.inc): Generate.
 	* src/syscall_names.c: New file.

@@ -43,12 +43,16 @@ plugin_free (roach_context_t *ctx)
 int
 plugin_add (roach_context_t *ctx, const char *options)
 {
-  char *buffer = strdup (options);
-  int syscall = atoi (options);
-  char *ret = strchr (buffer, ',');
+  char *buffer;
+  int syscall;
+  char *ret;
   void *ret_code;
+
+  buffer = strdup (options);
   if (buffer == NULL)
     return -1;
+
+  ret = strchr (buffer, ',');
   if (ret)
     {
       *ret = '\0';
@@ -58,6 +62,9 @@ plugin_add (roach_context_t *ctx, const char *options)
     ret_code = (void *) atol (ret);
   else
     ret_code =(void *) -1;
+
+  if (get_syscall_by_name (buffer, &syscall) < 0)
+    syscall = atoi (buffer);
 
   if (roach_reg_syscall (ctx, syscall, roach_syscall_inhibit, ret_code) < 0)
     exit (EXIT_FAILURE);
