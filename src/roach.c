@@ -149,6 +149,9 @@ roach_rot_process (roach_context_t *ctx, char const *exec, char *const *argv)
 
       if (ptrace (PTRACE_SETOPTIONS, pid, NULL, options) < 0)
         error (EXIT_FAILURE, errno, "error setting ptrace options %i", pid);
+
+      if (ptrace (PTRACE_SYSCALL, pid, NULL, NULL) < 0)
+        error (EXIT_FAILURE, errno, "waking up process");
     }
 
   ctx->current_pid = ctx->root_pid = pid;
@@ -163,10 +166,9 @@ roach_wait (roach_context_t *ctx)
   roach_hook_t *hook;
   int status = 0;
 
-  if (ptrace (PTRACE_SYSCALL, ctx->current_pid, NULL, NULL) < 0)
-    error (EXIT_FAILURE, errno, "waking up process");
-
   ret = waitpid (-1, &status, 0);
+  if (ret == ctx->root_pid && WIFEXITED (status))
+    return 0;
 
   ctx->current_pid = ret;
   ctx->last_syscall = syscall = roach_get_sc (ctx);
@@ -187,8 +189,9 @@ roach_wait (roach_context_t *ctx)
   if (ret == ctx->root_pid)
     ctx->entering_sc = !ctx->entering_sc;
 
-  if (ret == ctx->root_pid && WIFEXITED (status))
-    return 0;
+  if (!WIFEXITED(status)
+      && ptrace (PTRACE_SYSCALL, ctx->current_pid, NULL, NULL) < 0)
+    error (EXIT_FAILURE, errno, "waking up process");
 
   return 1;
 }
