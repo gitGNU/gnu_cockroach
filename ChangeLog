@@ -1,3 +1,9 @@
+2015-04-03  Giuseppe Scrivano  <gscrivan@redhat.com>
+
+	* src/roach.h (roach_reg_syscalls): New function.
+	* src/roach.c (roach_reg_syscalls): Likewise.
+	(roach_reg_syscall): Use the new function.
+
 2015-04-03  Jose E. Marchesi  <jemarch@gnu.org>
 
 	* src/plugins/fail_mem/Makefile.am (AM_CFLAGS): Use $(srcdir).

@@ -42,7 +42,7 @@ roach_make_hook (enum HOOK_TYPE type, int *syscalls, hook_func_t hook,
   r->hook = hook;
   r->data = data;
 
-  for (syscall = syscalls; *syscall; syscall++)
+  for (syscall = syscalls; *syscall != -1; syscall++)
     if (*syscall > max_sc)
       max_sc = *syscall;
 
@@ -53,7 +53,7 @@ roach_make_hook (enum HOOK_TYPE type, int *syscalls, hook_func_t hook,
       return NULL;
     }
 
-  for (syscall = syscalls; *syscall; syscall++)
+  for (syscall = syscalls; *syscall != -1; syscall++)
     roach_bitmap_set (r->syscalls, *syscall);
 
   return r;
@@ -308,11 +308,10 @@ roach_wait (roach_context_t *ctx)
 }
 
 int
-roach_reg_syscall (roach_context_t *ctx, int syscall, hook_func_t hook_func,
-                   void *data)
+roach_reg_syscalls (roach_context_t *ctx, int syscalls[], hook_func_t hook_func,
+                    void *data)
 {
   roach_hook_t *hook;
-  int syscalls[] = {syscall, 0};
 
   hook = roach_make_hook (HOOK_BOTH, syscalls, hook_func, data);
   if (hook == NULL)
@@ -320,6 +319,16 @@ roach_reg_syscall (roach_context_t *ctx, int syscall, hook_func_t hook_func,
 
   roach_ctx_add_hook (ctx, hook);
   return 0;
+}
+
+int
+roach_reg_syscall (roach_context_t *ctx, int syscall, hook_func_t hook_func,
+                   void *data)
+{
+  roach_hook_t *hook;
+  int syscalls[] = {syscall, -1};
+
+  return roach_reg_syscalls (ctx, syscalls, hook_func, data);
 }
 
 pid_t
