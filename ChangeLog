@@ -1,5 +1,10 @@
 2015-04-04  Jose E. Marchesi  <jemarch@gnu.org>
 
+	* src/Makefile.am (BUILT_SOURCES): syscall_names.c.inc is
+	automatically generated.
+
+2015-04-04  Jose E. Marchesi  <jemarch@gnu.org>
+
 	* src/syscall_names.c: Added a file header.
 
 2015-04-03  Giuseppe Scrivano  <gscrivan@redhat.com>
