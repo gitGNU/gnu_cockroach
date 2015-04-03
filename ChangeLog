@@ -1,3 +1,7 @@
+2015-04-04  Jose E. Marchesi  <jemarch@gnu.org>
+
+	* src/syscall_names.c: Added a file header.
+
 2015-04-03  Giuseppe Scrivano  <gscrivan@redhat.com>
 
 	* tests/Makefile.am (LDADD): Fix order.
