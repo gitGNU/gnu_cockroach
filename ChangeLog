@@ -1,5 +1,7 @@
 2015-04-03  Giuseppe Scrivano  <gscrivan@redhat.com>
 
+	* tests/Makefile.am (LDADD): Fix order.
+
 	* src/roach.h (roach_reg_syscalls): New function.
 	* src/roach.c (roach_reg_syscalls): Likewise.
 	(roach_reg_syscall): Use the new function.
