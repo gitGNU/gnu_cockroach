@@ -1,5 +1,7 @@
 2015-04-03  Giuseppe Scrivano  <gscrivan@redhat.com>
 
+	* bootstrap.conf (gnulib_modules): Sort list.
+
 	* src/roach.c (roach_wait): Do not try to wake up an exited process.
 
 2015-04-02  Giuseppe Scrivano  <gscrivan@redhat.com>
