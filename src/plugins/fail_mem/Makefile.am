@@ -16,7 +16,7 @@
 
 include $(top_srcdir)/Makefile.am.common
 
-AM_CFLAGS=-I../..
+AM_CFLAGS=-I$(srcdir)/../..
 
 plugin_LTLIBRARIES = fail_mem.la
 fail_mem_la_SOURCES = fail_mem.c
