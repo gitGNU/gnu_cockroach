@@ -110,4 +110,8 @@ int roach_syscall_inhibit (roach_context_t *ctx, pid_t pid, bool enter,
 int roach_reg_syscall (roach_context_t *ctx, int syscall,
                        hook_func_t hook_func, void *data);
 
+/* syscall_names.c */
+int syscall_names_initialize ();
+int get_syscall_by_name (const char *name, int *ret);
+
 #endif /* !ROACH_H */

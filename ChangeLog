@@ -1,5 +1,9 @@
 2015-04-03  Giuseppe Scrivano  <gscrivan@redhat.com>
 
+	* src/cockroach.c (main): Invoke syscall_names_initialize.
+	* src/Makefile.am (syscall_names.c.inc): Generate.
+	* src/syscall_names.c: New file.
+
 	* src/roach.h (roach_context_s): Make entering_sc an hashtable.
 	(roach_get_last_sc): New function.
 	* src/roach.c (roach_wait): Register new child process.

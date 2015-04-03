@@ -143,6 +143,9 @@ main (int argc, char **argv)
 
   plugins_load_dir (ctx, PLUGINDIR);
 
+  if (syscall_names_initialize ())
+    error (EXIT_FAILURE, 0, "error initializing syscall names");
+
   /* Process the command line arguments for cockroach.  */
   for (max_argc = 1; max_argc < argc; max_argc++)
     if (argv[max_argc][0] != '-')
