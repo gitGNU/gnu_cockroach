@@ -1,5 +1,19 @@
 2015-04-03  Giuseppe Scrivano  <gscrivan@redhat.com>
 
+	* src/roach.h (roach_context_s): Make entering_sc an hashtable.
+	(roach_get_last_sc): New function.
+	* src/roach.c (roach_wait): Register new child process.
+	(set_last_sc): New function.
+	(roach_get_last_sc): Likewise.
+	(set_entering_sc): Likewise.
+	(roach_entering_sc_p): Likewise.
+	(insert_pid): Likewise.
+	(roach_rot_process): Register the first process.
+
+	* src/Makefile.am (cockroach_LDADD): Fix inclusion order.
+	* bootstrap.conf (gnulib_modules): Add "hash".
+	* TODO: update.
+
 	* bootstrap.conf (gnulib_modules): Sort list.
 
 	* src/roach.c (roach_wait): Do not try to wake up an exited process.

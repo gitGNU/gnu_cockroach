@@ -54,17 +54,17 @@ typedef struct s_hook
 }
 roach_hook_t;
 
+struct hash_table;
+typedef struct hash_table Hash_table;
+
 typedef struct roach_context_s
 {
   /* Root process.  */
   pid_t root_pid;
   pid_t current_pid;
   roach_hook_t *hooks;
-  int last_syscall;
 
-  /* FIXME: replace with a hashmap that maps
-     pid -> entering_sc instead of having just one.  */
-  bool entering_sc;
+  Hash_table *entering_sc;
 }
 roach_context_t;
 
@@ -85,7 +85,9 @@ pid_t roach_spawn_process (roach_context_t *ctx, char const *exec,
                          char *const *argv);
 int roach_wait (roach_context_t *ctx);
 
-bool roach_entering_sc_p (roach_context_t *ctx);
+bool roach_entering_sc_p (roach_context_t *ctx, pid_t pid);
+
+int roach_get_last_sc (roach_context_t *ctx, pid_t pid);
 
 /* Return the process causing the break.  */
 pid_t roach_ctx_get_pid (roach_context_t *ctx);

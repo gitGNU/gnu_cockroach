@@ -42,8 +42,7 @@ cockroach_SOURCES = cockroach.c
 
 cockroach_LDFLAGS = -ldl
 
-cockroach_LDADD = @LIBINTL@ $(top_builddir)/lib/libcockroach.la libroach.la
-cockroach_LDADD = @LIBINTL@ ../lib/libcockroach.la libroach.la
+cockroach_LDADD = libroach.la @LIBINTL@ $(top_builddir)/lib/libcockroach.la
 
 AM_CPPFLAGS = -I$(top_srcdir)/lib -I$(top_builddir)/lib \
               -DLOCALEDIR=\"$(localedir)\" -DPLUGINDIR=\"$(plugindir)\"

@@ -25,7 +25,7 @@
 #include <stdlib.h>
 #include <sys/ptrace.h>
 #include <errno.h>
-
+#include <hash.h>
 #include "roach.h"
 
 roach_hook_t *
@@ -59,6 +59,13 @@ roach_make_hook (enum HOOK_TYPE type, int *syscalls, hook_func_t hook,
   return r;
 }
 
+struct process_context_s
+{
+  pid_t pid;
+  bool entering_sc;
+  int last_syscall;
+};
+
 void
 roach_free_hook (roach_hook_t *ctx)
 {
@@ -66,6 +73,20 @@ roach_free_hook (roach_hook_t *ctx)
   free (ctx);
 }
 
+static bool
+PID_compare (void const *x, void const *y)
+{
+  const struct process_context_s *p1 = x;
+  const struct process_context_s *p2 = y;
+  return p1->pid == p2->pid;
+}
+
+static size_t
+PID_hash (void const *x, size_t table_size)
+{
+  const struct process_context_s *p = x;
+  return p->pid % table_size;
+}
 
 roach_context_t *
 roach_make_context ()
@@ -75,8 +96,8 @@ roach_make_context ()
     return c;
 
   c->hooks = NULL;
-  c->entering_sc = false;
-  c->last_syscall = 0;
+  c->entering_sc = hash_initialize (1, NULL, PID_hash,
+                                    PID_compare, NULL);
 
   return c;
 }
@@ -127,6 +148,18 @@ roach_ctx_rm_hook (roach_context_t *ctx, roach_hook_t *hook)
     ctx->hooks = it->next;
 }
 
+static void
+insert_pid (roach_context_t *ctx, pid_t pid)
+{
+  struct process_context_s *val = malloc (sizeof *val);
+
+  val->pid = pid;
+  val->last_syscall = -1;
+  val->entering_sc = false;
+
+  val = hash_insert (ctx->entering_sc, val);
+}
+
 int
 roach_rot_process (roach_context_t *ctx, char const *exec, char *const *argv)
 {
@@ -154,8 +187,63 @@ roach_rot_process (roach_context_t *ctx, char const *exec, char *const *argv)
         error (EXIT_FAILURE, errno, "waking up process");
     }
 
+  insert_pid (ctx, pid);
   ctx->current_pid = ctx->root_pid = pid;
   return pid;
+}
+
+static void
+set_last_sc (roach_context_t *ctx, pid_t pid, int syscall)
+{
+  struct process_context_s key;
+  struct process_context_s *val;
+
+  key.pid = pid;
+  val = hash_lookup (ctx->entering_sc, &key);
+  if (! val)
+    error (EXIT_FAILURE, 0, "hash_lookup failure");
+
+  val->last_syscall = syscall;
+}
+
+int
+roach_get_last_sc (roach_context_t *ctx, pid_t pid)
+{
+  struct process_context_s key;
+  struct process_context_s *val;
+  key.pid = pid;
+  val = hash_lookup (ctx->entering_sc, &key);
+  if (! val)
+    error (EXIT_FAILURE, 0, "hash_lookup failure");
+
+  return val->last_syscall;
+}
+
+static void
+set_entering_sc (roach_context_t *ctx, pid_t pid, bool status)
+{
+  struct process_context_s key;
+  struct process_context_s *val;
+
+  key.pid = pid;
+  val = hash_lookup (ctx->entering_sc, &key);
+  if (! val)
+    error (EXIT_FAILURE, 0, "hash_lookup failure");
+
+  val->entering_sc = status;
+}
+
+bool
+roach_entering_sc_p (roach_context_t *ctx, pid_t pid)
+{
+  struct process_context_s key;
+  struct process_context_s *val;
+  key.pid = pid;
+  val = hash_lookup (ctx->entering_sc, &key);
+  if (! val)
+    error (EXIT_FAILURE, 0, "hash_lookup failure");
+
+  return val->entering_sc;
 }
 
 int
@@ -165,20 +253,39 @@ roach_wait (roach_context_t *ctx)
   int syscall;
   roach_hook_t *hook;
   int status = 0;
-
+  bool entering_sc;
   ret = waitpid (-1, &status, 0);
+
+  /* Exit when the root process ends.  Maybe wait for all processes to end?  */
   if (ret == ctx->root_pid && WIFEXITED (status))
     return 0;
 
-  ctx->current_pid = ret;
-  ctx->last_syscall = syscall = roach_get_sc (ctx);
+#define IS_EVENT(X) (status >> 8 == (SIGTRAP | (X << 8)))
 
+  if (IS_EVENT (PTRACE_EVENT_FORK)
+      || IS_EVENT (PTRACE_EVENT_CLONE)
+      || IS_EVENT (PTRACE_EVENT_VFORK))
+    {
+      pid_t new_pid;
+      ptrace (PTRACE_GETEVENTMSG, ret, NULL, &new_pid);
+      insert_pid (ctx, new_pid);
+
+      if (ptrace (PTRACE_SYSCALL, ret, NULL, NULL) < 0)
+        error (EXIT_FAILURE, errno, "waking up process");
+      return 1;
+    }
+
+  ctx->current_pid = ret;
+  syscall = roach_get_sc (ctx);
+  set_last_sc (ctx, ret, syscall);
+
+  entering_sc = roach_entering_sc_p (ctx, ret);
   for (hook = ctx->hooks; hook; hook = hook->next)
     {
-      if (!ctx->entering_sc && hook->type == HOOK_ENTER)
+      if (!entering_sc && hook->type == HOOK_ENTER)
         continue;
 
-      if (ctx->entering_sc && hook->type == HOOK_EXIT)
+      if (entering_sc && hook->type == HOOK_EXIT)
         continue;
 
       /* What to do with the return code?  */
@@ -186,20 +293,18 @@ roach_wait (roach_context_t *ctx)
         hook->hook (ctx, ret, ctx->entering_sc, hook->data);
     }
 
-  if (ret == ctx->root_pid)
-    ctx->entering_sc = !ctx->entering_sc;
+  set_entering_sc (ctx, ret, !entering_sc);
 
-  if (!WIFEXITED(status)
-      && ptrace (PTRACE_SYSCALL, ctx->current_pid, NULL, NULL) < 0)
+  if (WIFEXITED (status))
+    {
+      struct process_context_s key;
+      key.pid = ret;
+      hash_delete (ctx->entering_sc, &key);
+    }
+  else if (ptrace (PTRACE_SYSCALL, ctx->current_pid, NULL, NULL) < 0)
     error (EXIT_FAILURE, errno, "waking up process");
 
   return 1;
-}
-
-bool
-roach_entering_sc_p (roach_context_t *ctx)
-{
-  return ctx->entering_sc;
 }
 
 int

@@ -49,7 +49,7 @@ long
 roach_get_sc (roach_context_t *ctx)
 {
   if (! ctx->entering_sc)
-    return ctx->last_syscall;
+    return roach_get_last_sc (ctx, ctx->current_pid);
 
   return ptrace (PTRACE_PEEKUSER, roach_ctx_get_pid (ctx), SC_REG_ADDR, syscall);
 }

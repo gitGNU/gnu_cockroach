@@ -1,7 +1,1 @@
 -*- mode: org -*-
-
-* Use context data per thread.
-
-  Different threads may enter/leave a syscall at the same time, leaving
-  the context data in an inconsistent form.  Ensure that each thread has
-  its own data.
