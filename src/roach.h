@@ -116,4 +116,21 @@ int roach_reg_syscalls (roach_context_t *ctx, int syscalls[],
 int syscall_names_initialize ();
 int get_syscall_by_name (const char *name, int *ret);
 
+/* syscall_specs.c */
+
+struct roach_sc_spec_arg_s
+{
+  char mod;  /* One of: '*', '@', '<', '>', '\0' */
+  long value;
+};
+
+typedef struct roach_sc_spec_s
+{
+  int syscall;
+  int nargs;
+  struct roach_sc_spec_arg_s args[8]; /* hard limit */
+} roach_sc_spec_t;
+
+int roach_parse_scspec (const char *str, roach_sc_spec_t *scspec);
+
 #endif /* !ROACH_H */

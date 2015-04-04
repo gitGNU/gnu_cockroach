@@ -26,7 +26,7 @@ instdir=@libdir@/roach/
 include_HEADERS = bitmap.h roach.h plugins.h
 
 EXTRA_DIST = arch/linux_generic.c arch/linux_i386.c arch/linux_x86_64.c
-libroach_la_SOURCES = bitmap.c roach.c plugins.c syscall_names.c
+libroach_la_SOURCES = bitmap.c roach.c plugins.c syscall_names.c syscall_specs.c
 
 libroach_la_LDFLAGS = -shared
 

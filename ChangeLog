@@ -1,5 +1,30 @@
 2015-04-04  Jose E. Marchesi  <jemarch@gnu.org>
 
+	* tests/test_scspecs.c (test_name_and_one_arg): New function.
+	(test_name_only): Likewise.
+	(test_name_and_two_args): Likewise.
+	(test_name_hex_args): Likewise.
+	(test_name_any_args): Likewise.
+	(test_name_backrefs_args): Likewise.
+	(test_name_comparison_args): Likewise.
+
+	* tests/Makefile.am (check_PROGRAMS): test-scspecs added.
+	(test_scspecs_SOURCES): Defined.
+	(test_scspecs_LDFLAGS): Likewise.
+
+	* tests/test_scspecs.c: New file.
+	(main): New function.
+
+	* src/Makefile.am (libroach_la_SOURCES): Added syscall_specs.c
+
+	* src/syscall_specs.c: New file.
+	(roach_parse_scspec): New function.
+
+	* src/roach.h (roach_sc_spec_arg_s): New struct.
+	(roach_sc_spec_s): Likewise.
+
+2015-04-04  Jose E. Marchesi  <jemarch@gnu.org>
+
 	* src/roach.c (roach_wait): The syscall in the arch-dependant SC
 	register could have been modified by an entering hook, such as
 	inhibit.  Use the per-PID saved last_sc in that case.

@@ -16,12 +16,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-check_PROGRAMS = test_bitmap
+check_PROGRAMS = test_bitmap test_scspecs
 
 AM_CFLAGS = -I$(top_srcdir)/src
 LDADD = @LIBINTL@ ../src/libroach.la ../lib/libcockroach.la
 
 test_bitmap_SOURCES = test_bitmap.c
 test_bitmap_LDFLAGS = -ldl
+
+test_scspecs_SOURCES = test_scspecs.c
+test_scspecs_LDFLAGS = -ldl
 
 TESTS = $(check_PROGRAMS)
