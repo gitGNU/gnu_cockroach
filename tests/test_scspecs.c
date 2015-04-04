@@ -21,7 +21,7 @@
 #include <roach.h>
 #include <syscall.h>
 
-roach_sc_spec_t spec;
+struct roach_sc_spec_s spec;
 
 int
 test_name_only (void)

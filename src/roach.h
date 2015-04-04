@@ -124,13 +124,14 @@ struct roach_sc_spec_arg_s
   long value;
 };
 
-typedef struct roach_sc_spec_s
+struct roach_sc_spec_s
 {
   int syscall;
   int nargs;
   struct roach_sc_spec_arg_s args[8]; /* hard limit */
-} roach_sc_spec_t;
+};
 
-int roach_parse_scspec (const char *str, roach_sc_spec_t *scspec);
+int roach_parse_scspec (const char *str, struct roach_sc_spec_s *scspec);
+bool roach_match_scspec (roach_context_t *ctx, struct roach_sc_spec_s *scspec);
 
 #endif /* !ROACH_H */

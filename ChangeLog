@@ -1,5 +1,9 @@
 2015-04-04  Jose E. Marchesi  <jemarch@gnu.org>
 
+	* src/syscall_specs.c (roach_match_scspec): New function.
+
+2015-04-04  Jose E. Marchesi  <jemarch@gnu.org>
+
 	* tests/test_scspecs.c (test_name_and_one_arg): New function.
 	(test_name_only): Likewise.
 	(test_name_and_two_args): Likewise.

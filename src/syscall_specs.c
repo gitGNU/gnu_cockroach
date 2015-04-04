@@ -26,7 +26,7 @@
 
 int
 roach_parse_scspec (const char *str,
-                    roach_sc_spec_t *scspec)
+                    struct roach_sc_spec_s *scspec)
 {
   /* The format of a SCSPEC is described by the following regexps:
 
@@ -110,3 +110,49 @@ roach_parse_scspec (const char *str,
  error:
   return -1;
 }
+
+/* Determine whether the current syscall matches SCSPEC.  */
+
+bool
+roach_match_scspec (roach_context_t *ctx,
+                    struct roach_sc_spec_s *scspec)
+{
+  size_t i;
+
+  /* Check the syscall number.  */
+  if (roach_get_sc (ctx) != scspec->syscall)
+    return 0;
+
+  /* Check the arguments.  */
+  for (i = 0; i < scspec->nargs; i++)
+    {
+      long svalue = scspec->args[i].value;
+      long value = roach_get_sc_arg (ctx, i);
+      if (value == -1)
+        return 0;
+
+      switch (scspec->args[i].mod)
+        {
+        case '*':
+        case '@':
+          /* Anything goes.  */
+          break;
+        case '<':
+          if (value >= svalue)
+            return 0;
+          break;
+        case '>':
+          if (value <= svalue)
+            return 0;
+          break;
+        case '\0':
+        default:
+          if (value != svalue)
+            return 0;
+          break;
+        }
+    }
+
+  return 1;
+}
+
