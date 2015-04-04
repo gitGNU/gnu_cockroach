@@ -128,10 +128,11 @@ struct roach_sc_spec_s
 {
   int syscall;
   int nargs;
+  char *user; /* Generic payload for the user convenience.  */
   struct roach_sc_spec_arg_s args[8]; /* hard limit */
 };
 
-int roach_parse_scspec (const char *str, struct roach_sc_spec_s *scspec);
+int roach_parse_scspec (const char *str, struct roach_sc_spec_s *scspec, char **endp);
 bool roach_match_scspec (roach_context_t *ctx, struct roach_sc_spec_s *scspec);
 
 #endif /* !ROACH_H */

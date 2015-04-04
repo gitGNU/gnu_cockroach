@@ -1,5 +1,17 @@
 2015-04-04  Jose E. Marchesi  <jemarch@gnu.org>
 
+	* src/plugins/inhibit/inhibit.c (inhibit_hook): New function.
+
+	* src/syscall_specs.c (roach_parse_scspec): Get a new argument
+	endp, that stores the next character to the matched string.
+
+	* src/plugins/inhibit/inhibit.c (plugin_add): Parse a scspec from
+	the command line and pass it to roach_syscall_inhibit.
+
+	* src/roach.h (struct roach_sc_spec_s): Added a new field `user'.
+
+2015-04-04  Jose E. Marchesi  <jemarch@gnu.org>
+
 	* src/syscall_specs.c (roach_match_scspec): New function.
 
 2015-04-04  Jose E. Marchesi  <jemarch@gnu.org>

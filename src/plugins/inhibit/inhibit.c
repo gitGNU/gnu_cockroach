@@ -21,6 +21,7 @@
 #include <roach.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 
 const char *
 plugin_get_name ()
@@ -40,33 +41,53 @@ plugin_free (roach_context_t *ctx)
   return 0;
 }
 
+static int
+inhibit_hook (roach_context_t *ctx, pid_t pid, bool enter, void *data)
+{
+  struct roach_sc_spec_s *spec = (struct roach_sc_spec_s *) data;
+
+  if (roach_match_scspec (ctx, spec))
+    return roach_syscall_inhibit (ctx, pid, enter, spec->user);
+
+  return 0;
+}
+
 int
 plugin_add (roach_context_t *ctx, const char *options)
 {
   char *buffer;
   int syscall;
-  char *ret;
-  void *ret_code;
+  char *ret, *end;
+  struct roach_sc_spec_s *spec;
 
   buffer = strdup (options);
   if (buffer == NULL)
     return -1;
 
-  ret = strchr (buffer, ',');
-  if (ret)
-    {
-      *ret = '\0';
-      ret++;
-    }
-  if (ret)
-    ret_code = (void *) atol (ret);
-  else
-    ret_code =(void *) -1;
+  /* Parse the options for this plugin.  The format is:
 
-  if (get_syscall_by_name (buffer, &syscall) < 0)
-    syscall = atoi (buffer);
+     SCSPEC,RET_CODE
 
-  if (roach_reg_syscall (ctx, syscall, roach_syscall_inhibit, ret_code) < 0)
+     where SCSPEC is a syscall spec and RET_CODE is an integer
+     expressed in either decimal, hexadecimal and/or octal.  The
+     number can be negative.  */
+
+  spec = malloc (sizeof (*spec));
+  if (spec == NULL)
+    return -1;
+
+  if (roach_parse_scspec (buffer, spec, &ret) < 0)
+    return -1;
+
+  if (*ret != ',')
+    return -1;
+
+  errno = 0;
+  spec->user = (void *) strtol (++ret, &end, 0);
+  if (errno == EINVAL || errno == ERANGE || end == ret)
+    return -1;
+
+  if (roach_reg_syscall (ctx, spec->syscall, inhibit_hook, spec) < 0)
     exit (EXIT_FAILURE);
 
   free (buffer);

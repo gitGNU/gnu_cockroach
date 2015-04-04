@@ -26,7 +26,8 @@
 
 int
 roach_parse_scspec (const char *str,
-                    struct roach_sc_spec_s *scspec)
+                    struct roach_sc_spec_s *scspec,
+                    char **endp)
 {
   /* The format of a SCSPEC is described by the following regexps:
 
@@ -103,8 +104,11 @@ roach_parse_scspec (const char *str,
 
       if (*p != ')')
         goto error;
+      p++;
     }
 
+  if (endp)
+    *endp = p;
   return 0;
 
  error:
@@ -127,9 +131,9 @@ roach_match_scspec (roach_context_t *ctx,
   for (i = 0; i < scspec->nargs; i++)
     {
       long svalue = scspec->args[i].value;
-      long value = roach_get_sc_arg (ctx, i);
+      long value = roach_get_sc_arg (ctx, i + 1);
       if (value == -1)
-        return 0;
+        continue;  /* Or return 0?  */
 
       switch (scspec->args[i].mod)
         {

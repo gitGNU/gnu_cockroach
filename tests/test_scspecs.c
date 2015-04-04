@@ -26,7 +26,7 @@ struct roach_sc_spec_s spec;
 int
 test_name_only (void)
 {
-  if (roach_parse_scspec ("write", &spec) < 0)
+  if (roach_parse_scspec ("write", &spec, NULL) < 0)
     return -1;
   if (spec.syscall != __NR_write)
     return -1;
@@ -39,7 +39,7 @@ test_name_only (void)
 int
 test_name_and_one_arg (void)
 {
-  if (roach_parse_scspec ("write(1)", &spec) < 0)
+  if (roach_parse_scspec ("write(1)", &spec, NULL) < 0)
     return -1;  
   if (spec.syscall != __NR_write)
     return -1;
@@ -54,7 +54,7 @@ test_name_and_one_arg (void)
 int
 test_name_and_two_args (void)
 {
-  if (roach_parse_scspec ("write(1,20)", &spec) < 0)
+  if (roach_parse_scspec ("write(1,20)", &spec, NULL) < 0)
     return -1;  
   if (spec.syscall != __NR_write)
     return -1;
@@ -71,7 +71,7 @@ test_name_and_two_args (void)
 int
 test_name_hex_args (void)
 {
-  if (roach_parse_scspec ("write(0xa,0xb)", &spec) < 0)
+  if (roach_parse_scspec ("write(0xa,0xb)", &spec, NULL) < 0)
     return -1;  
   if (spec.syscall != __NR_write)
     return -1;
@@ -88,7 +88,7 @@ test_name_hex_args (void)
 int
 test_name_any_args (void)
 {
-  if (roach_parse_scspec ("write(*,0xb)", &spec) < 0)
+  if (roach_parse_scspec ("write(*,0xb)", &spec, NULL) < 0)
     return -1;
   if (spec.syscall != __NR_write)
     return -1;
@@ -105,7 +105,7 @@ test_name_any_args (void)
 int
 test_name_backrefs_args (void)
 {
-  if (roach_parse_scspec ("write(*,0xb,@2)", &spec) < 0)
+  if (roach_parse_scspec ("write(*,0xb,@2)", &spec, NULL) < 0)
     return -1;
   if (spec.syscall != __NR_write)
     return -1;
@@ -126,7 +126,7 @@ test_name_backrefs_args (void)
 int
 test_name_comparison_args (void)
 {
-  if (roach_parse_scspec ("write(*,<0xb,>2)", &spec) < 0)
+  if (roach_parse_scspec ("write(*,<0xb,>2)", &spec, NULL) < 0)
     return -1;
   if (spec.syscall != __NR_write)
     return -1;
