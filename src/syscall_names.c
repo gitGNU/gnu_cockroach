@@ -82,7 +82,7 @@ get_syscall_by_name (const char *name, int *ret)
   key.name = name;
   val = hash_lookup (syscall_names, &key);
   if (val == NULL)
-    return 0;
+    return -1;
 
   *ret = val->syscall;
   return 0;
