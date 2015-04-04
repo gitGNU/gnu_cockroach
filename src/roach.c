@@ -276,10 +276,18 @@ roach_wait (roach_context_t *ctx)
     }
 
   ctx->current_pid = ret;
-  syscall = roach_get_sc (ctx);
-  set_last_sc (ctx, ret, syscall);
-
   entering_sc = roach_entering_sc_p (ctx, ret);
+
+  /* The syscall in SC could have been modified by an entering hook,
+     so we cannot really rely on it.  */
+  if (entering_sc)
+    {
+      syscall = roach_get_sc (ctx);
+      set_last_sc (ctx, ret, syscall);
+    }
+  else
+    syscall = roach_get_last_sc (ctx, ret);
+
   for (hook = ctx->hooks; hook; hook = hook->next)
     {
       if (!entering_sc && hook->type == HOOK_ENTER)

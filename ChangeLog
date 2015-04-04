@@ -1,5 +1,11 @@
 2015-04-04  Jose E. Marchesi  <jemarch@gnu.org>
 
+	* src/roach.c (roach_wait): The syscall in the arch-dependant SC
+	register could have been modified by an entering hook, such as
+	inhibit.  Use the per-PID saved last_sc in that case.
+
+2015-04-04  Jose E. Marchesi  <jemarch@gnu.org>
+
 	* src/roach.c (roach_wait): pass entering_sc to the hook, not the
 	possibly uninitialized ctx->entering_sc.
 
