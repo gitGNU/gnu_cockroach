@@ -289,8 +289,8 @@ roach_wait (roach_context_t *ctx)
         continue;
 
       /* What to do with the return code?  */
-      if (roach_bitmap_p (hook->syscalls, syscall))
-        hook->hook (ctx, ret, ctx->entering_sc, hook->data);
+      if (roach_bitmap_p (hook->syscalls, syscall))        
+        hook->hook (ctx, ret, entering_sc, hook->data);
     }
 
   set_entering_sc (ctx, ret, !entering_sc);

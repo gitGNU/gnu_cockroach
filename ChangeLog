@@ -1,5 +1,10 @@
 2015-04-04  Jose E. Marchesi  <jemarch@gnu.org>
 
+	* src/roach.c (roach_wait): pass entering_sc to the hook, not the
+	possibly uninitialized ctx->entering_sc.
+
+2015-04-04  Jose E. Marchesi  <jemarch@gnu.org>
+
 	* src/syscall_names.c (std_syscalls): New global.
 	(__SYSCALL): Macro defined in order to build the members of
 	std_syscalls including asm/unistd.h.
