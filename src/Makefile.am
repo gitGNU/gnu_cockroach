@@ -48,10 +48,3 @@ cockroach_LDADD = libroach.la @LIBINTL@ $(top_builddir)/lib/libcockroach.la
 
 AM_CPPFLAGS = -I$(top_srcdir)/lib -I$(top_builddir)/lib \
               -DLOCALEDIR=\"$(localedir)\" -DPLUGINDIR=\"$(plugindir)\"
-
-
-BUILT_SOURCES = syscall_names.c.inc
-syscall_names.c.inc: $(SYSCALLS_INC_FILE)
-	$(SED) -n -re /__NR/"s/.*__NR_(.*)\ (.*)$$/  if (register_name (\U\"\1\", \2)) \Lreturn -1;/gp" < $< >$@.tmp
-	mv $@.tmp $@
-

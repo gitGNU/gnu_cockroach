@@ -22,13 +22,21 @@
 #include <hash.h>
 #include <string.h>
 
-static Hash_table *syscall_names;
-
 struct syscall_entry
 {
   const char *name;
   int syscall;
 };
+
+static Hash_table *syscall_names;
+
+static struct syscall_entry std_syscalls[] =
+  {
+#define __SYSCALL(sc_num, sc_name)                              \
+    { #sc_name, sc_num },
+#include <asm/unistd.h>
+    { NULL, 0 }
+  };
 
 static bool
 SC_compare (void const *x, void const *y)
@@ -45,32 +53,23 @@ SC_hash (void const *x, size_t table_size)
   return hash_string (s->name, table_size);
 }
 
-static int
-register_name (const char *name, int value)
-{
-  struct syscall_entry *entry = malloc (sizeof *entry);
-  if (entry == NULL)
-    return -1;
-
-  entry->name = strdup (name);
-  if (entry->name == NULL)
-    return -1;
-
-  entry->syscall = value;
-  if (hash_insert (syscall_names, entry) == NULL)
-    return -1;
-
-  return 0;
-}
-
 int
 syscall_names_initialize ()
 {
+  size_t i;
   syscall_names = hash_initialize (200, NULL, SC_hash, SC_compare, NULL);
+
   if (syscall_names == NULL)
     return -1;
 
-#include "syscall_names.c.inc"
+  for (i = 0; std_syscalls[i].name != NULL; i++)
+    {
+      /* Skip the `sys_' prefix in the syscall name.  */
+      std_syscalls[i].name += 4;
+
+      if (hash_insert (syscall_names, &std_syscalls[i]) == NULL)
+        return -1;
+    }
 
   return 0;
 }

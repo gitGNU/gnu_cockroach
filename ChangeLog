@@ -1,5 +1,16 @@
 2015-04-04  Jose E. Marchesi  <jemarch@gnu.org>
 
+	* src/syscall_names.c (std_syscalls): New global.
+	(__SYSCALL): Macro defined in order to build the members of
+	std_syscalls including asm/unistd.h.
+	(syscall_names_initialize): Register the syscalls in std_syscalls
+	into the hash.
+	(register_name): Function deleted.
+	* src/Makefile.am (syscall_names.c.inc): Rule deleted.
+	(BUILT_SOURCES): Deleted.
+
+2015-04-04  Jose E. Marchesi  <jemarch@gnu.org>
+
 	* src/Makefile.am (BUILT_SOURCES): syscall_names.c.inc is
 	automatically generated.
 
