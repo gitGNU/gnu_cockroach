@@ -1,3 +1,13 @@
+2015-04-04  Jose E. Marchesi  <jose.marchesi@oracle.com>
+
+	* src/arch/linux_sparc64.c: New file.
+	* configure.ac (ROACH_ARCH): AC_Defined.
+	* src/arch/syscall_names.h: New file.
+	* src/syscall_names.c: Include syscall_names instead of
+	<asm/unistd.h>.
+	* src/arch/sparc_syscall_names.h: New file.
+	* configure.ac: New supported architecture sparc64.
+
 2015-04-05  Jose E. Marchesi  <jemarch@gnu.org>
 
 	* src/plugins/Makefile.am (pkginclude_HEADERS): Install plugin.h

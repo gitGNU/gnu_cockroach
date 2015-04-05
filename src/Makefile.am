@@ -40,6 +40,10 @@ if ROACH_ARCH_X86_64
    SYSCALLS_INC_FILE = /usr/include/asm/unistd_64.h
 endif
 
+if ROACH_ARCH_SPARC64
+   libroach_la_SOURCES += arch/linux_sparc64.c
+endif
+
 cockroach_SOURCES = cockroach.c
 
 cockroach_LDFLAGS = -ldl

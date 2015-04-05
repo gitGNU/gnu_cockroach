@@ -39,13 +39,21 @@ gl_INIT
 # is a valid one.
 AC_CANONICAL_HOST
 case ${host} in
-     i[[3456]]86-*-linux-*) ROACH_ARCH=x86_32;;
-     x86_64-*-linux-*) ROACH_ARCH=x86_64;;
+     i[[3456]]86-*-linux-*)
+	ROACH_ARCH=x86_32;
+	AC_DEFINE([ROACH_ARCH_X86_32],[1],[cockroach architecture]);;
+     x86_64-*-linux-*)
+	ROACH_ARCH=x86_64;
+	AC_DEFINE([ROACH_ARCH_X86_64],[1],[cockroach architecture]);;
+     sparc64-*-linux-*)
+        ROACH_ARCH=sparc64;
+	AC_DEFINE([ROACH_ARCH_SPARC64],[1],[cockroach architecture]);;
      *) AC_ERROR([Unsupported architecture "${host}"]) ;;
 esac
 AC_SUBST([ROACH_ARCH])
 AM_CONDITIONAL([ROACH_ARCH_X86_32],[test "$ROACH_ARCH" = "x86_32"])
 AM_CONDITIONAL([ROACH_ARCH_X86_64],[test "$ROACH_ARCH" = "x86_64"])
+AM_CONDITIONAL([ROACH_ARCH_SPARC64],[test "$ROACH_ARCH" = "sparc64"])
 
 AC_PROG_LIBTOOL
 LT_INIT([dlopen])

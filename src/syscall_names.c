@@ -34,7 +34,7 @@ static struct syscall_entry std_syscalls[] =
   {
 #define __SYSCALL(sc_num, sc_name)                              \
     { #sc_name, sc_num },
-#include <asm/unistd.h>
+#include "arch/syscall_names.h"
     { NULL, 0 }
   };
 

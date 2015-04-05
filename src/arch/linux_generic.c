@@ -45,6 +45,8 @@
 
 #define min(a,b) ((a) < (b) ? (a) : (b))
 
+#ifndef ARCH_HAS_GET_SC
+
 long
 roach_get_sc (roach_context_t *ctx)
 {
@@ -54,11 +56,19 @@ roach_get_sc (roach_context_t *ctx)
   return ptrace (PTRACE_PEEKUSER, roach_ctx_get_pid (ctx), SC_REG_ADDR, syscall);
 }
 
+#endif
+
+#ifndef ARCH_HAS_SET_SC
+
 long
 roach_set_sc (roach_context_t *ctx, int syscall)
 {
   return ptrace (PTRACE_POKEUSER, roach_ctx_get_pid (ctx), SC_REG_ADDR, syscall);
 }
+
+#endif
+
+#ifndef ARCH_HAS_GET_SC_RET
 
 long
 roach_get_sc_ret (roach_context_t *ctx)
@@ -66,11 +76,19 @@ roach_get_sc_ret (roach_context_t *ctx)
   return ptrace (PTRACE_PEEKUSER, roach_ctx_get_pid (ctx), SC_RET_ADDR, 0);
 }
 
+#endif
+
+#ifndef ARCH_HAS_SET_SC_RET
+
 long
 roach_set_sc_ret (roach_context_t *ctx, int retval)
 {
   return ptrace (PTRACE_POKEUSER, roach_ctx_get_pid (ctx), SC_RET_ADDR, retval);
 }
+
+#endif
+
+#ifndef ARCH_HAS_SET_SC_ARG
 
 long
 roach_set_sc_arg (roach_context_t *ctx, int arg, void *data)
@@ -105,6 +123,10 @@ roach_set_sc_arg (roach_context_t *ctx, int arg, void *data)
   return ptrace (PTRACE_POKEUSER, roach_ctx_get_pid (ctx), reg_address, data);
 }
 
+#endif
+
+#ifndef ARCH_HAS_GET_SC_ARG
+
 long
 roach_get_sc_arg (roach_context_t *ctx, int arg)
 {
@@ -137,6 +159,10 @@ roach_get_sc_arg (roach_context_t *ctx, int arg)
 
   return ptrace (PTRACE_PEEKUSER, roach_ctx_get_pid (ctx), reg_address, NULL);
 }
+
+#endif
+
+#ifndef ARCH_HAS_WRITE_MEM
 
 int
 roach_write_mem (roach_context_t *ctx, const char const *data,
@@ -175,6 +201,10 @@ roach_write_mem (roach_context_t *ctx, const char const *data,
   return 0;
 }
 
+#endif
+
+#if ARCH_HAS_READ_MEM
+
 int
 roach_read_mem (roach_context_t *ctx, char *data,
                 const char const *addr, size_t len)
@@ -210,6 +240,8 @@ roach_read_mem (roach_context_t *ctx, char *data,
 
   return 0;
 }
+
+#endif
 
 #ifndef ARCH_HAS_SYSCALL_INHIBIT
 
