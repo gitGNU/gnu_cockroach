@@ -1,5 +1,8 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl
+dnl Copyright (C) 2015 Giuseppe Scrivano.
+dnl Copyright (C) 2015 Jose E. Marchesi.
+dnl
 dnl This file is free software; as a special exception the author gives
 dnl unlimited permission to copy and/or distribute it, with or without
 dnl modifications, as long as this notice is preserved.
