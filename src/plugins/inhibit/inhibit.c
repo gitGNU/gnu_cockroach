@@ -88,7 +88,7 @@ plugin_add (roach_context_t *ctx, const char *options)
     return -1;
 
   if (roach_reg_syscall (ctx, spec->syscall, inhibit_hook, spec) < 0)
-    exit (EXIT_FAILURE);
+    return -1;
 
   free (buffer);
   return 0;

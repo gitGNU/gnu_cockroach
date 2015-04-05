@@ -1,3 +1,9 @@
+2015-04-05  Jose E. Marchesi  <jemarch@gnu.org>
+
+	* src/plugins/inhibit/inhibit.c (plugin_add): Do not exit the
+	process in library code.  Return a failure code instead.
+	* src/plugins/fail_mem/fail_mem.c (plugin_add): Likewise.
+
 2015-04-04  Jose E. Marchesi  <jemarch@gnu.org>
 
 	* src/plugins/inhibit/inhibit.c (inhibit_hook): New function.
