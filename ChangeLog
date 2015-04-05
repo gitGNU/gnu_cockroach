@@ -1,3 +1,15 @@
+2015-04-05  Jose E. Marchesi  <jemarch@gnu.org>
+
+	* src/arch/linux_sparc64.c (get_sparc_reg): New function.
+	(set_sparc_reg): Likewise.
+	(roach_get_sc): Implemented.
+	(roach_get_sc_ret): Likewise.
+	(roach_get_sc_arg): Likewise.
+	(roach_set_sc): Likewise.
+	(roach_set_sc_ret): Likewise.
+	(roach_set_sc_arg): Likewise.
+	Include ucontext.h.
+
 2015-04-04  Jose E. Marchesi  <jose.marchesi@oracle.com>
 
 	* src/arch/linux_sparc64.c: New file.

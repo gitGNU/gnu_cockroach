@@ -19,6 +19,7 @@
 */
 
 #include "../roach.h"
+#include <ucontext.h>
 
 /* The sparc linux port does not have a seekable/pokeable USER area,
    so we have to define our own accessor functions.  */
@@ -30,46 +31,139 @@
 #define ARCH_HAS_SET_SC_ARG 1
 #define ARCH_HAS_GET_SC_ARG 1
 
+static gregset_t sparc_regs;
+
+static int
+get_sparc_reg (roach_context_t *ctx, int offset, long &value)
+{
+  if (ptrace (PTRACE_GETREGS, roach_ctx_get_pid (ctx), &sparc_regs, 0) == -1)
+    return -1;
+
+  *value = (long) regs[offset];
+  return 0;
+}
+
+static int
+set_sparc_reg (roach_context_t *ctx, int offset, long value)
+{
+  if (ptrace (PTRACE_GETREGS, roach_ctx_get_pid (ctx), &sparc_regs, 0) == -1)
+    return -1;
+
+  regs[offset] = (greg_t) value;
+
+  if (ptrace (PTRACE_SETREGS, roach_ctx_get_pid (ctx), &sparc_regs, 0) == -1)
+    return -1;
+
+  return 0;
+}
+
 long
 roach_get_sc (roach_context_t *ctx)
 {
-  /* XXX */
-  return 0;
+  long ret;
+
+  if (get_sparc_reg (ctx, REG_G1, &ret) < 0)
+    return -1;
+  return ret;
 }
 
 long
 roach_set_sc (roach_context_t *ctx, int syscall)
 {
-  /* XXX */
-  return 0;
+  return set_sparc_reg (ctx, REG_G1, syscall);
 }
 
 long
 roach_get_sc_ret (roach_context_t *ctx)
 {
-  /* XXX */
-  return 0;
+  long ret;
+
+  if (get_sparc_reg (ctx, REG_O0, &ret) < 0)
+    return -1;
+  return ret;
 }
 
 long
 roach_set_sc_ret (roach_context_t *ctx, int retval)
 {
-  /* XXX */
-  return 0;
+  return set_sparc_reg (ctx, REG_O0, retval);
 }
 
 long
 roach_set_sc_arg (roach_context_t *ctx, int arg, void *data)
 {
-  /* XXX */
-  return 0;
+  int offset = 0;
+  switch (arg)
+    {
+    case 1:
+      offset = REG_O0;
+      break;
+
+    case 2:
+      offset = REG_O1;
+      break;
+
+    case 3:
+      offset = REG_O2;
+      break;
+
+    case 4:
+      offset = REG_O3;
+      break;
+
+    case 5:
+      offset = REG_O4;
+      break;
+
+    case 6:
+      offset = REG_O5;
+      break;
+
+    default:
+      return -1;
+    }
+
+  return set_sparc_reg (ctx, offset, data);
 }
 
 long
 roach_get_sc_arg (roach_context_t *ctx, int arg)
 {
-  /* XXX */
-  return 0;
+  long ret;
+  int offset = 0;
+  switch (arg)
+    {
+    case 1:
+      offset = REG_O0;
+      break;
+
+    case 2:
+      offset = REG_O1;
+      break;
+
+    case 3:
+      offset = REG_O2;
+      break;
+
+    case 4:
+      offset = REG_O3;
+      break;
+
+    case 5:
+      offset = REG_O4;
+      break;
+
+    case 6:
+      offset = REG_O5;
+      break;
+
+    default:
+      return -1;
+    }
+
+  if (get_sparc_reg (ctx, offset, &ret) < 0)
+    return -1;
+  return ret;
 }
 
 #include "linux_generic.c"
