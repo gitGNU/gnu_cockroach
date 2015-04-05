@@ -17,4 +17,4 @@
 SUBDIRS = fail_mem inhibit
 AM_CFLAGS = -I$(srcdir)/..
 
-include_HEADERS = plugin.h
+pkginclude_HEADERS = plugin.h
