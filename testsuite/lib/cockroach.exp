@@ -1,0 +1,114 @@
+# Copyright (c) 2015 Jose E. Marchesi
+# Copyright (c) 2015 Giuseppe Scrivano
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Generic cockroach subroutines.
+
+if {$tool == ""} {
+    send_error "`site.exp' not found, run `make site.exp'!\n"
+}
+
+# Load other libraries here:
+load_lib standard.exp
+load_lib dejagnu.exp
+
+# ROACH is the tool to test.  This can be set by the user on the
+# command line:
+# $ make check RUNTESTFLAGS=COCKROACH=cockroach
+
+global COCKROACH
+if ![info exists COCKROACH] {
+    set COCKROACH ${objdir}/../src/cockroach
+}
+
+# roach_run -- run the cockroach with the given options and return its
+# output.
+
+proc roach_run {options} {
+
+
+    return $output
+}
+
+# roach_build_test_program -- build a test program.
+#
+# This procedure assigns a variable in the caller's stack frame named
+# after the built program; the variable contains the full path to the
+# built program.  Signal a failed test and stop testing if the build
+# fails.
+
+proc roach_build_test_program {source dest options} {
+    global objdir
+    global subdir
+    upvar #0 $dest var
+    
+    if {[roach_compile $source $dest exe $options] != ""} {
+        fail "building test program $source"
+        exit
+    }
+    set var $objdir/$subdir/$dest
+}
+
+# roach_test OPTIONS PATTERN [MESSAGE] -- run the cockroach with the
+# given options, and try to match its standard output with the given
+# regexp.  If it does not match then the test is failed and a proper
+# diagnostic message is printed to the standard output.
+#
+# Returns:
+#    1 if the test failed,
+#    0 if the test passes,
+#   -1 if there was an internal error.
+
+proc roach_test {args} {
+    global COCKROACH
+    global test
+
+    # Get the arguments.  MESSAGE is optional.  If it is not specified
+    # then we use the options as the message.
+    if [llength $args]>2 then {
+	set message [lindex $args 2]
+    } else {
+	set message "cockroach [lindex $args 0]"
+    }
+    set options [lindex $args 0]
+    set pattern [lindex $args 1]
+
+    # Run the roach with the given options and test the result.
+    eval spawn $COCKROACH $options
+    puts "eval spawn $COCKROACH $options"
+    expect {
+        -re "^$pattern\(\r?\n\)?$" {
+            pass $message
+        } 
+        default {
+            fail $message
+        }
+    }
+    catch close
+
+    return 0
+}
+
+# roach-compile -- routine to compile test programs in the test
+# directory.  Returns an empty string if everything is ok, and the
+# error message otherwise.
+
+proc roach_compile {source dest type options} {
+    global srcdir
+    global subdir
+    global objdir
+    return [target_compile $srcdir/$subdir/${source} \
+                $objdir/$subdir/${dest} ${type} ${options}]
+}

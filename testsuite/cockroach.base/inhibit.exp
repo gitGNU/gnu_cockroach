@@ -1,0 +1,42 @@
+#   Copyright (C) 2015 Jose E. Marchesi
+#   Copyright (C) 2015 Giuseppe Scrivano
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA 02110-1301, USA.
+
+# Please email any bugs, comments, and/or additions to this file to:
+# cockroach-devel@nongnu.org
+
+load_lib ../lib/cockroach.exp
+
+set test "inhibit"
+
+roach_build_test_program test_a.c test_a {}
+
+roach_test "--plugin=inhibit:write,0 $test_a" ""\
+    "inhibited syscall"
+roach_test "--plugin=inhibit:write(*,*,*),0 $test_a" "" \
+    "inhibited syscall with parameters"
+roach_test "--plugin=inhibit:write(*,*,4),0 $test_a" "" \
+    "inhibited syscall with exact size"
+roach_test "--plugin=inhibit:write(*,*,<5),0 $test_a" "" \
+    "inhibited syscall with comparison operator"
+
+roach_test "--plugin=inhibit:write(*,*,5),0 $test_a" foo \
+    "Non inhibited syscall with exact size"
+roach_test "--plugin=inhibit:write(*,*,>4),0 $test_a" foo \
+    "Non inhibited syscall with comparison operator"
+roach_test "--plugin=inhibit:getpid,0 $test_a" foo \
+    "Non inhibited syscall with another syscall"
+
