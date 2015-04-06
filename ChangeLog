@@ -1,5 +1,14 @@
 2015-04-06  Jose E. Marchesi  <jemarch@gnu.org>
 
+	* configure.ac: Output testsuite/unit/Makeifle.
+	* Makefile.am (SUBDIRS): Remove tests/.
+	* testsuite/Makefile.am (SUBDIRS): Recurse into unit/.
+	* testsuite/unit/Makefile.am: Moved from tests/
+	* testsuite/unit/test_bitmap.c: Likewise.
+	* testsuite/unit/test_scspecs.c: Likewise.
+
+2015-04-06  Jose E. Marchesi  <jemarch@gnu.org>
+
 	* configure.ac: Output testsuite/Makefile and
 	testsuite/cockroach.base/Makefile.
 	* testsuite/lib/cockroach.exp: New file.

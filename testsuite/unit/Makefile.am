@@ -18,8 +18,9 @@
 
 check_PROGRAMS = test_bitmap test_scspecs
 
-AM_CFLAGS = -I$(top_srcdir)/src
-LDADD = @LIBINTL@ ../src/libroach.la ../lib/libcockroach.la
+# Note that the gnu89 inline semantics are needed for dejagnu.h.
+AM_CFLAGS = -I$(top_srcdir)/src -fgnu89-inline
+LDADD = @LIBINTL@ $(top_builddir)/src/libroach.la $(top_builddir)/lib/libcockroach.la
 
 test_bitmap_SOURCES = test_bitmap.c
 test_bitmap_LDFLAGS = -ldl

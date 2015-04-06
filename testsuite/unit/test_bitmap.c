@@ -18,6 +18,7 @@
    along with the program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <dejagnu.h>
 #include <bitmap.h>
 
 static int
@@ -133,10 +134,11 @@ test_bitmap_flip_all ()
 int
 main ()
 {
-#define TEST(x) if (x) return 1;
-
+#define TEST(x) if (x) pass(#x); else fail(#x)
   TEST (test_bitmap_make ());
   TEST (test_bitmap_set ());
   TEST (test_bitmap_flip ());
+
+  totals ();
   return 0;
 }

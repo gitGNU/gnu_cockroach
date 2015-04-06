@@ -20,6 +20,7 @@
 
 #include <roach.h>
 #include <syscall.h>
+#include <dejagnu.h>
 
 struct roach_sc_spec_s spec;
 
@@ -158,7 +159,7 @@ main ()
 {
   syscall_names_initialize ();
   
-#define TEST(x) if ((x) == -1) return 1
+#define TEST(x) if ((x) == -1) pass(#x); else fail(#x)
   TEST(test_name_only());
   TEST(test_name_and_one_arg());
   TEST(test_name_and_two_args());
@@ -166,5 +167,7 @@ main ()
   TEST(test_name_any_args());
   TEST(test_name_backrefs_args());
   TEST(test_name_comparison_args());
+
+  totals ();
   return 0;
 }
