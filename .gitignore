@@ -29,6 +29,7 @@ po/Makevars
 po/POTFILES
 po/cockroach.pot
 po/stamp-po
+po/roach.pot
 src/cockroach
 stamp-h1
 stamp-h2
