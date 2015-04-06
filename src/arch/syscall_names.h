@@ -25,6 +25,15 @@
 
 #ifdef ROACH_ARCH_SPARC64
 # include "sparc_syscall_names.h"
+#elif ROACH_ARCH_X86_32
+# define __SYSCALL_I386(x,y,z) __SYSCALL(x, y)
+# include "x86_32_syscalls.h"
+#elif ROACH_ARCH_X86_64
+# define __SYSCALL_X32(x,y,z) __SYSCALL(x, y)
+# define __SYSCALL_32(x,y,z) __SYSCALL(x, y)
+# define __SYSCALL_64(x,y,z) __SYSCALL(x, y)
+# define __SYSCALL_COMMON(x,y,z) __SYSCALL(x, y)
+# include "x86_64_syscalls.h"
 #else
 # include <asm/unistd.h>
 #endif

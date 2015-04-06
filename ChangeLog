@@ -1,3 +1,11 @@
+2015-04-06  Giuseppe Scrivano  <gscrivan@redhat.com>
+
+	* src/arch/syscall_names.h [ROACH_ARCH_X86_32]: Include
+	"x86_32_syscalls.h".
+	[ROACH_ARCH_X86_64]: Include "x86_64_syscalls.h".
+	* src/arch/x86_32_syscalls.h: New file.
+	* src/arch/x86_64_syscalls.h: New file.
+
 2015-04-05  Jose E. Marchesi  <jemarch@gnu.org>
 
 	* src/arch/linux_sparc64.c (get_sparc_reg): New function.
