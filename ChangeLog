@@ -1,5 +1,10 @@
 2015-04-06  Jose E. Marchesi  <jemarch@gnu.org>
 
+	* src/syscall_specs.c (roach_parse_scspec): Avoid a warning due to
+	an implicit "const" to no "const" conversion.
+
+2015-04-06  Jose E. Marchesi  <jemarch@gnu.org>
+
 	* configure.ac: Output testsuite/unit/Makeifle.
 	* Makefile.am (SUBDIRS): Remove tests/.
 	* testsuite/Makefile.am (SUBDIRS): Recurse into unit/.

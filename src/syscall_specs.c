@@ -40,7 +40,7 @@ roach_parse_scspec (const char *str,
   */
 
   char *name;
-  const char *p = str;
+  char *p = (char *) str;
   
   /* Parse the syscall name and translate it into a syscall number.  */
   while ((*p == '_') || (*p >= 'a' && *p <= 'z') || (*p >= 'A' && *p <= 'Z'))
