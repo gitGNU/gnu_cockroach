@@ -25,6 +25,7 @@
 # include <stddef.h>
 # include <sys/types.h>
 # include <stdbool.h>
+# include <regex.h>
 # include "bitmap.h"
 
 enum HOOK_TYPE
@@ -120,8 +121,12 @@ int get_syscall_by_name (const char *name, int *ret);
 
 struct roach_sc_spec_arg_s
 {
-  char mod;  /* One of: '*', '@', '<', '>', '\0' */
-  long value;
+  char mod;  /* One of: '*', '@', '<', '>', '\0', '/', '"' */
+  union {
+    long word;
+    char *str;
+    regex_t regex;
+  } value;
 };
 
 struct roach_sc_spec_s

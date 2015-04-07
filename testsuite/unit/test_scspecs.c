@@ -20,6 +20,7 @@
 
 #include <roach.h>
 #include <syscall.h>
+#include <regex.h>
 #include <dejagnu.h>
 
 struct roach_sc_spec_s spec;
@@ -46,7 +47,7 @@ test_name_and_one_arg (void)
     return -1;
   if (spec.nargs != 1)
     return -1;
-  if (spec.args[0].value != 1)
+  if (spec.args[0].value.word != 1)
     return -1;
 
   return 0;
@@ -61,9 +62,9 @@ test_name_and_two_args (void)
     return -1;
   if (spec.nargs != 2)
     return -1;
-  if (spec.args[0].value != 1)
+  if (spec.args[0].value.word != 1)
     return -1;
-  if (spec.args[1].value != 20)
+  if (spec.args[1].value.word != 20)
     return -1;
 
   return 0;
@@ -78,9 +79,9 @@ test_name_hex_args (void)
     return -1;
   if (spec.nargs != 2)
     return -1;
-  if (spec.args[0].value != 10)
+  if (spec.args[0].value.word != 10)
     return -1;
-  if (spec.args[1].value != 11)
+  if (spec.args[1].value.word != 11)
     return -1;
 
   return 0;
@@ -97,7 +98,7 @@ test_name_any_args (void)
     return -1;
   if (spec.args[0].mod != '*')
     return -1;
-  if (spec.args[1].value != 11)
+  if (spec.args[1].value.word != 11)
     return -1;
 
   return 0;
@@ -114,11 +115,11 @@ test_name_backrefs_args (void)
     return -1;
   if (spec.args[0].mod != '*')
     return -1;
-  if (spec.args[1].value != 11)
+  if (spec.args[1].value.word != 11)
     return -1;
   if (spec.args[2].mod != '@')
     return -1;
-  if (spec.args[2].value != 2)
+  if (spec.args[2].value.word != 2)
     return -1;
 
   return 0;
@@ -137,11 +138,58 @@ test_name_comparison_args (void)
     return -1;
   if (spec.args[1].mod != '<')
     return -1;
-  if (spec.args[1].value != 11)
+  if (spec.args[1].value.word != 11)
     return -1;
   if (spec.args[2].mod != '>')
     return -1;
-  if (spec.args[2].value != 2)
+  if (spec.args[2].value.word != 2)
+    return -1;
+
+  return 0;
+}
+
+int
+test_name_string_args (void)
+{
+  if (roach_parse_scspec ("write(*,\"foo\",>2)", &spec, NULL) < 0)
+    return -1;
+  if (spec.syscall != __NR_write)
+    return -1;
+  if (spec.nargs != 3)
+    return -1;
+  if (spec.args[0].mod != '*')
+    return -1;
+  if (spec.args[1].mod != '"')
+    return -1;
+  if (strcmp (spec.args[1].value.str, "foo") != 0)
+    return -1;
+  if (spec.args[2].mod != '>')
+    return -1;
+  if (spec.args[2].value.word != 2)
+    return -1;
+
+  return 0;
+}
+
+int
+test_name_regex_args (void)
+{
+  if (roach_parse_scspec ("write(*,/^foo$/,>2)", &spec, NULL) < 0)
+    return -1;
+  if (spec.syscall != __NR_write)
+    return -1;
+  if (spec.nargs != 3)
+    return -1;
+  if (spec.args[0].mod != '*')
+    return -1;
+  if (spec.args[1].mod != '/')
+    return -1;
+  if (regexec (&spec.args[1].value.regex,
+               "foo", 0, NULL, 0) == REG_NOMATCH)
+    return -1;
+  if (spec.args[2].mod != '>')
+    return -1;
+  if (spec.args[2].value.word != 2)
     return -1;
 
   return 0;
@@ -159,7 +207,7 @@ main ()
 {
   syscall_names_initialize ();
   
-#define TEST(x) if ((x) == -1) pass(#x); else fail(#x)
+#define TEST(x) if ((x) < 0) fail(#x); else pass(#x)
   TEST(test_name_only());
   TEST(test_name_and_one_arg());
   TEST(test_name_and_two_args());
@@ -167,7 +215,9 @@ main ()
   TEST(test_name_any_args());
   TEST(test_name_backrefs_args());
   TEST(test_name_comparison_args());
+  TEST(test_name_string_args());
+  TEST(test_name_regex_args());
 
   totals ();
-  return 0;
+  return failed;
 }

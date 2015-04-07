@@ -33,7 +33,7 @@ roach_parse_scspec (const char *str,
 
      SCNAME ::= [a-zA-Z_]+
      ARGS   ::= \(ARG(,ARG)*\)
-     ARG    ::= *|@NUM|<NUM|>NUM
+     ARG    ::= *|@NUM|<NUM|>NUM|"STR"|/REGEXP/
      NUM    ::= (0x)?[0-9]+
 
      SCSPEC ::= SCNAME(SCARGS)?
@@ -65,7 +65,8 @@ roach_parse_scspec (const char *str,
             = &scspec->args[scspec->nargs++];
           p++;
           if (*p == '*' || *p == '@' || (*p >= '0' && *p <= '9')
-              || *p == '-' || *p == '<' || *p == '>')
+              || *p == '-' || *p == '<' || *p == '>'
+              || *p == '"' || *p == '/')
             {
               int neg = 1;
               if (arg == NULL)
@@ -77,6 +78,33 @@ roach_parse_scspec (const char *str,
                 case '*':
                   arg->mod = *p++;
                   break;
+                case '"':
+                case '/':
+                  {
+                    int escaped = 0;
+                    char *q, *buf;
+
+                    arg->mod = *p++;
+                    for (escaped = 0, q = p; *p != arg->mod && !escaped; p++)
+                      if (*p == '\\')
+                        escaped = 1;
+                    buf = malloc (p - q + 1);
+                    if (!buf)
+                      goto error;
+                    strncpy (buf, q, p - q);
+                    p++;
+
+                    if (arg->mod == '"')
+                      arg->value.str = buf;
+                    else
+                      {
+                        if (regcomp (&arg->value.regex, buf,
+                                     REG_EXTENDED | REG_NOSUB) != 0)
+                          return -1;
+                      }
+                    
+                    break;
+                  }
                 case '@':
                 case '<':
                 case '>':
@@ -89,7 +117,7 @@ roach_parse_scspec (const char *str,
                        octal and hexadecimal numeration bases (up to
                        base 36 with Z=35).  */
                     errno = 0;
-                    arg->value = strtol (p, &end, 0);
+                    arg->value.word = strtol (p, &end, 0);
                     if (errno == EINVAL || errno == ERANGE || end == p)
                       goto error;
                     p = end;
@@ -130,12 +158,13 @@ roach_match_scspec (roach_context_t *ctx,
   /* Check the arguments.  */
   for (i = 0; i < scspec->nargs; i++)
     {
-      long svalue = scspec->args[i].value;
+      struct roach_sc_spec_arg_s *arg = &scspec->args[i];
+      long svalue = arg->value.word;
       long value = roach_get_sc_arg (ctx, i + 1);
       if (value == -1)
         continue;  /* Or return 0?  */
 
-      switch (scspec->args[i].mod)
+      switch (arg->mod)
         {
         case '*':
         case '@':
@@ -149,6 +178,34 @@ roach_match_scspec (roach_context_t *ctx,
           if (value <= svalue)
             return 0;
           break;
+        case '"':
+        case '/':
+          {
+            /* Read the string from the traced process.  */
+            char *buf = alloca (255); /* Yes, this sucks.  */
+            size_t j;
+            for (j = 0; j < 255; j++)
+              {
+                if (roach_read_mem (ctx, buf + j, (char *) value + j, 1) < 0)
+                  return 0;
+                if (buf[j] == '\0') break;
+              }
+            if (buf[j] != '\0') return 0;
+
+            /* Compare it.  */
+            if (arg->mod == '"')
+              {
+                if (strcmp (buf, arg->value.str) != 0)
+                  return 0;
+              }
+            else
+              {
+                if (regexec (&arg->value.regex, buf, 0, NULL, 0) == REG_NOMATCH)
+                  return 0;
+              }
+            
+            break;
+          }
         case '\0':
         default:
           if (value != svalue)

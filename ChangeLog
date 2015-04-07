@@ -1,5 +1,32 @@
 2015-04-07  Jose E. Marchesi  <jemarch@gnu.org>
 
+	* testsuite/unit/test_scspecs.c (test_name_string_args): New test.
+	(test_name_regex_args): Likewise.
+
+	* testsuite/unit/test_bitmap.c (main): Likewise.
+
+	* testsuite/unit/test_scspecs.c (main): Return failed.
+
+	* src/syscall_specs.c (roach_parse_scspec): Support string
+	and regexp arguments in scspecs.
+	(roach_match_scspec): Likewise.
+
+	* src/roach.h: Include regex.h.
+	(struct roach_sc_spec_arg_s): Use an union for the values.
+	* src/syscall_specs.c (roach_parse_scspec): Adapted to the new arg
+	structure.
+	(roach_match_scspec): Likewise.
+
+	* testsuite/unit/test_scspecs.c (test_name_only): Likewise.
+	(test_name_and_one_arg): Likewise.
+	(test_name_and_two_args): Likewise.
+	(test_name_hex_args): Likewise.
+	(test_name_any_args): Likewise.
+	(test_name_backrefs_args): Likewise.
+	(test_name_comparison_args): Likewise.
+
+2015-04-07  Jose E. Marchesi  <jemarch@gnu.org>
+
 	* src/arch/linux_generic.c (roach_get_sc_arg): Support a sixth
 	argument on syscalls.
 	(roach_set_sc_arg): Likewise.
@@ -12,12 +39,6 @@
 	(SC_ARG5_ADDR): Likewise.
 	(SC_ARG6_ADDR): New.
 	(SC_ARG6_ADDR): LIkewise.
-
-2015-04-07  Jose E. Marchesi  <jemarch@gnu.org>
-
-	* src/syscall_specs.c (roach_parse_scspec): Support string
-	and regexp arguments in scspecs.
-	(roach_match_scspec): Likewise.
 
 2015-04-07  Jose E. Marchesi  <jemarch@gnu.org>
 

@@ -30,6 +30,8 @@ roach_test "--plugin=inhibit:write(*,*,4),0 $test_a" "" \
     "inhibited syscall with exact size"
 roach_test "--plugin=inhibit:write(*,*,<5),0 $test_a" "" \
     "inhibited syscall with comparison operator"
+roach_test "--plugin=inhibit:write(*,/foo/,*),0 $test_a" "" \
+    "inhibited syscall with regex operator"
 
 roach_test "--plugin=inhibit:write(*,*,5),0 $test_a" foo \
     "Non inhibited syscall with exact size"
@@ -37,4 +39,5 @@ roach_test "--plugin=inhibit:write(*,*,>4),0 $test_a" foo \
     "Non inhibited syscall with comparison operator"
 roach_test "--plugin=inhibit:getpid,0 $test_a" foo \
     "Non inhibited syscall with another syscall"
-
+roach_test "--plugin=inhibit:write(*,/xxx/,*),0 $test_a" foo \
+    "Non inhibited syscall with regex operator"

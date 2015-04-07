@@ -134,11 +134,11 @@ test_bitmap_flip_all ()
 int
 main ()
 {
-#define TEST(x) if (x) pass(#x); else fail(#x)
+#define TEST(x) if (x == 0) pass(#x); else fail(#x)
   TEST (test_bitmap_make ());
   TEST (test_bitmap_set ());
   TEST (test_bitmap_flip ());
 
   totals ();
-  return 0;
+  return failed;
 }
