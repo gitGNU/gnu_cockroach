@@ -31,7 +31,7 @@
    SC_RET_ADDR: Address of the register containing the syscall return
    value in the child process USER area.
 
-   SC_ARG[1-5]_ADDR: Addresses of the registers containing the
+   SC_ARG[1-6]_ADDR: Addresses of the registers containing the
    syscall arguments in the child process USER area.
 
    These constants get defined if they weren't previously defined:
@@ -116,6 +116,10 @@ roach_set_sc_arg (roach_context_t *ctx, int arg, void *data)
       reg_address = SC_ARG5_ADDR;
       break;
 
+    case 6:
+      reg_address = SC_ARG6_ADDR;
+      break;
+
     default:
       return -1;
     }
@@ -151,6 +155,10 @@ roach_get_sc_arg (roach_context_t *ctx, int arg)
 
     case 5:
       reg_address = SC_ARG5_ADDR;
+      break;
+
+    case 6:
+      reg_address = SC_ARG6_ADDR;
       break;
 
     default:
@@ -203,7 +211,7 @@ roach_write_mem (roach_context_t *ctx, const char const *data,
 
 #endif
 
-#if ARCH_HAS_READ_MEM
+#ifndef ARCH_HAS_READ_MEM
 
 int
 roach_read_mem (roach_context_t *ctx, char *data,

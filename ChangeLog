@@ -1,5 +1,26 @@
 2015-04-07  Jose E. Marchesi  <jemarch@gnu.org>
 
+	* src/arch/linux_generic.c (roach_get_sc_arg): Support a sixth
+	argument on syscalls.
+	(roach_set_sc_arg): Likewise.
+
+	* src/arch/linux_x86_64.c (SC_ARG1_ADDR): Fixed to reflect the ABI
+	used by the `syscall' x86_64 instruction.
+	(SC_ARG2_ADDR): Likewise.
+	(SC_ARG3_ADDR): Likewise.
+	(SC_ARG4_ADDR): Likewise.
+	(SC_ARG5_ADDR): Likewise.
+	(SC_ARG6_ADDR): New.
+	(SC_ARG6_ADDR): LIkewise.
+
+2015-04-07  Jose E. Marchesi  <jemarch@gnu.org>
+
+	* src/syscall_specs.c (roach_parse_scspec): Support string
+	and regexp arguments in scspecs.
+	(roach_match_scspec): Likewise.
+
+2015-04-07  Jose E. Marchesi  <jemarch@gnu.org>
+
 	* testsuite/cockroach.base/inhibit.exp: Remove spurious line.
 
 2015-04-06  Jose E. Marchesi  <jemarch@gnu.org>

@@ -35,11 +35,12 @@
 #   define SC_REG_SIZE  (sizeof (unsigned long))
 #   define SC_REG_ADDR  (SC_REG_SIZE * ORIG_RAX)
 #   define SC_RET_ADDR  (SC_REG_SIZE * RAX)
-#   define SC_ARG1_ADDR (SC_REG_SIZE * RBX)
-#   define SC_ARG2_ADDR (SC_REG_SIZE * RCX)
+#   define SC_ARG1_ADDR (SC_REG_SIZE * RDI)
+#   define SC_ARG2_ADDR (SC_REG_SIZE * RSI)
 #   define SC_ARG3_ADDR (SC_REG_SIZE * RDX)
-#   define SC_ARG4_ADDR (SC_REG_SIZE * RSI)
-#   define SC_ARG5_ADDR (SC_REG_SIZE * RDI)
+#   define SC_ARG4_ADDR (SC_REG_SIZE * R10)
+#   define SC_ARG5_ADDR (SC_REG_SIZE * R8)
+#   define SC_ARG6_ADDR (SC_REG_SIZE * R9)
 #else
 #   define SC_REG_SIZE  (sizeof (long int))
 #   define SC_REG_ADDR  (SC_REG_SIZE * ORIG_EAX)
@@ -49,6 +50,7 @@
 #   define SC_ARG3_ADDR (SC_REG_SIZE * EDX)
 #   define SC_ARG4_ADDR (SC_REG_SIZE * ESI)
 #   define SC_ARG5_ADDR (SC_REG_SIZE * EDI)
+#   define SC_ARG6_ADDR (SC_REG_SIZE * EBP)
 #endif
 
 #include "linux_generic.c"
