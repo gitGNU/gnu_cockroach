@@ -20,8 +20,6 @@
 
 load_lib ../lib/cockroach.exp
 
-set test "inhibit"
-
 roach_build_test_program test_a.c test_a {}
 
 roach_test "--plugin=inhibit:write,0 $test_a" ""\
