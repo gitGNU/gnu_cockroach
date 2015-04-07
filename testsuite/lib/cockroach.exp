@@ -87,7 +87,6 @@ proc roach_test {args} {
 
     # Run the roach with the given options and test the result.
     eval spawn $COCKROACH $options
-    puts "eval spawn $COCKROACH $options"
     expect {
         -re "^$pattern\(\r?\n\)?$" {
             pass $message
