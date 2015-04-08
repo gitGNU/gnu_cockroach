@@ -81,6 +81,7 @@ AC_CONFIG_FILES([Makefile \
            src/plugins/Makefile \
            src/plugins/fail_mem/Makefile \
            src/plugins/inhibit/Makefile \
+           src/plugins/translate/Makefile \
            testsuite/unit/Makefile \
            testsuite/Makefile \
            testsuite/cockroach.base/Makefile])

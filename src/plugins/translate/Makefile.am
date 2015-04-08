@@ -1,5 +1,5 @@
-# Copyright 2011 Giuseppe Scrivano.
-# Copyright 2011 Jose E. Marchesi.
+# Copyright 2015 Giuseppe Scrivano.
+# Copyright 2015 Jose E. Marchesi.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,7 +14,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-SUBDIRS = fail_mem inhibit translate
-AM_CFLAGS = -I$(srcdir)/..
+include $(top_srcdir)/Makefile.am.common
 
-pkginclude_HEADERS = plugin.h
+AM_CFLAGS=-I$(srcdir)/../..
+
+plugin_LTLIBRARIES = translate.la
+translate_la_SOURCES = translate.c
+translate_la_LDFLAGS = -shared -module

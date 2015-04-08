@@ -344,3 +344,18 @@ roach_ctx_get_pid (roach_context_t *ctx)
 {
   return ctx->current_pid;
 }
+
+int
+roach_syscall_install (roach_context_t *ctx, pid_t pid, int syscall,
+                       int nargs, long *args)
+{
+  size_t i;
+
+  roach_set_sc (ctx, syscall);
+  for (i = 0; i < nargs; i++)
+    if (roach_set_sc_arg (ctx, i + 1, (void *) args[i]) < 0)
+      return -1;
+
+  return 0;
+}
+

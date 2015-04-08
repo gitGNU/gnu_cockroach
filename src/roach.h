@@ -90,6 +90,9 @@ bool roach_entering_sc_p (roach_context_t *ctx, pid_t pid);
 
 int roach_get_last_sc (roach_context_t *ctx, pid_t pid);
 
+int roach_syscall_install (roach_context_t *ctx, pid_t pid, int syscall,
+                           int nargs, long *args);
+
 /* Return the process causing the break.  */
 pid_t roach_ctx_get_pid (roach_context_t *ctx);
 

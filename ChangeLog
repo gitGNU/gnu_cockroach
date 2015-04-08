@@ -1,3 +1,13 @@
+2015-04-08  Jose E. Marchesi  <jemarch@gnu.org>
+
+	* testsuite/cockroach.base/translate.exp: New file.
+
+	* src/plugins/Makefile.am (SUBDIRS): Recurse into translate/
+	* configure.ac: AC_OUTPUT src/plugin/translate/Makefile.
+	* src/plugins/translate/Makefile.am: New file.
+	* src/plugins/translate/translate.c: Likewise.
+	* src/roach.c (roach_syscall_install): New function.
+
 2015-04-07  Jose E. Marchesi  <jemarch@gnu.org>
 
 	* testsuite/unit/test_scspecs.c (test_name_string_args): New test.
