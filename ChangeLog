@@ -1,3 +1,8 @@
+2015-04-08  Jose E. Marchesi  <jose.marchesi@oracle.com>
+
+	* src/plugins/translate/translate.c (translate_hook): Allocate
+	args dynamically instead of using a hard limit.
+
 2015-04-08  Jose E. Marchesi  <jemarch@gnu.org>
 
 	* testsuite/cockroach.base/translate.exp: New file.

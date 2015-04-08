@@ -44,7 +44,7 @@ plugin_free (roach_context_t *ctx)
 static int
 translate_hook (roach_context_t *ctx, pid_t pid, bool enter, void *data)
 {
-  long args[6];
+  long *args;
   size_t i;
   
   struct roach_sc_spec_s *spec1 = (struct roach_sc_spec_s *) data;
@@ -56,6 +56,7 @@ translate_hook (roach_context_t *ctx, pid_t pid, bool enter, void *data)
   if (!roach_match_scspec (ctx, spec1))
     return 0;
 
+  args = alloca (spec2->nargs);
   for (i = 0; i < spec2->nargs; i++)
     switch (spec2->args[i].mod)
       {
