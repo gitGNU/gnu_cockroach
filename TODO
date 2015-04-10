@@ -1,1 +1,2 @@
 -*- mode: org -*-
+* Support the different kind of syscall invokations on x86_64
